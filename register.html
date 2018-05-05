@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自主装机报价系统</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <script src="js/jquery-3.1.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="js/home.js"></script>
+    <script src="js/my.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">自主装机报价系统</a>
+        </div>
+        <div>
+
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        用户注册
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <form id="form1" class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon">账号</span>
+                                    <input name="userId" type="text" class="form-control">
+                                </div>
+                                <br/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">密码</span>
+                                    <input id="pwd1" name="userPasswd" type="password" class="form-control">
+                                </div>
+                                <br/>
+                                <div class="input-group">
+                                    <span class="input-group-addon">确认密码</span>
+                                    <input id="pwd2" name="userPasswd2" type="password" class="form-control"
+                                           onkeyup="keyup()">
+                                </div>
+                                <br/>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row center-block">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-4 ">
+                            <button onclick="register()" class="btn btn-warning center-block">注册</button>
+                        </div>
+                        <div class="col-xs-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function keyup() {
+        if (event.keyCode == 13) {
+            register()
+        }
+    }
+
+    function register() {
+        if ($('#pwd1').val() != $('#pwd2').val())
+            alert('两次输入的密码不相同');
+        var o = $('#form1').serializeObject();
+        delete o.userPasswd2;
+        localStorage.setItem("userkey", null);
+        $.ajax({
+            type: "POST",
+            url: host + "/user/user",
+            data: JSON.stringify(o),
+            contentType: "application/json",
+            success: function (msg) {
+                if (msg.code == 200) {
+                    location = 'login.html'
+                } else {
+                    alert(msg.data);
+                }
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+            }
+        })
+    }
+
+    go('CPU')
+</script>
+</html>

@@ -1,0 +1,160 @@
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 id="choose_title_div" class="panel-title">
+                请选择筛选条件
+            </h3>
+        </div>
+        <ul id="cate_group" class="list-group cate">
+            <li class="list-group-item">
+                <div class="row center-block">
+                    <div class="col-md-2 ">
+                        内存类型
+                    </div>
+                    <div class="col-md-10">
+                        <a class="cate active" onclick="changeType(null)">不限</a>
+                        <a class="cate" onclick="changeType('DDR')">DDR</a>
+                        <a class="cate" onclick="changeType('DDR II')">DDR II</a>
+                        <a class="cate" onclick="changeType('DDR III')">DDR III</a>
+                        <a class="cate" onclick="changeType('DDR IV')">DDR IV</a>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row center-block">
+                    <div class="col-md-2 ">
+                        内存容量
+                    </div>
+                    <div class="col-md-10">
+                        <a class="cate active" onclick="changeSize(null)">不限</a>
+                        <a class="cate" onclick="changeSize('ATX')">2G</a>
+                        <a class="cate" onclick="changeSize('4G')">4G</a>
+                        <a class="cate" onclick="changeSize('6G')">6G</a>
+                        <a class="cate" onclick="changeSize('8G')">8G</a>
+                        <a class="cate" onclick="changeSize('16G')">16G</a>
+                        <a class="cate" onclick="changeSize('32G')">32G</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                产品列表
+            </h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-responsive table-hover">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>型号</th>
+                    <th>类型</th>
+                    <th>容量</th>
+                    <th>价格</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <ul class="pager">
+                <li class="previous"><a onclick="goLast()">&larr; 上一页</a></li>
+                <li class="next"><a onclick="goNext()">下一页 &rarr;</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    which =
+        {
+            "memdType": null,
+            "memdSize": null,
+        };
+    $(function () {
+        currentPage = 0;
+        list(which, currentPage);
+    });
+
+    function refreshMark() {
+        current = $(window.event.target);
+        current.parent().children().each(function () {
+            $(this).removeClass("active")
+        });
+        current.addClass('active');
+    }
+
+
+    function changeType(name) {
+        which.memdType = name;
+        refreshMark();
+        currentPage = 0;
+        list(which, currentPage)
+    }
+
+    function changeSize(name) {
+        which.memdSize = name;
+        refreshMark();
+        currentPage = 0;
+        list(which, currentPage)
+    }
+
+    function goLast() {
+        if (currentPage != 0) {
+            currentPage -= 1;
+            list(which, currentPage)
+        }
+    }
+
+    function goNext() {
+        currentPage += 1
+        list(which, currentPage)
+    }
+
+    function list(which, page) {
+        table = $('tbody');
+        table.html('');
+        $.ajax({
+            type: "POST",
+            url: host + "/part/memory-part/" + page,
+            data: JSON.stringify(which),
+            contentType: "application/json",
+            success: function (msg) {
+                data = msg.data;
+                for (i in data) {
+                    data1 = data[i].memory;
+                    data2 = data[i].memoryDetail;
+
+                    html = "<tr onclick=\"select('memory'" + ",'" + data1.memName + "','" + data1.memPrice + "'," + data1.memId + ")\">";
+
+                    // if (data1.cpuName.indexOf('i3') != -1) {
+                    //     html += '<td>' + '<img src="img/i3.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('i5') != -1) {
+                    //     html += '<td>' + '<img src="img/i5.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('i7') != -1) {
+                    //     html += '<td>' + '<img src="img/i7.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('奔腾') != -1) {
+                    //     html += '<td>' + '<img src="img/pentium.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('至强') != -1) {
+                    //     html += '<td>' + '<img src="img/celeron.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('赛扬') != -1) {
+                    //     html += '<td>' + '<img src="img/xeon.jpg"/>' + '</td>';
+                    // } else {
+                        html += '<td></td>'
+                    // }
+                    html += '<td>' + data1.memName + '</td>';
+                    html += '<td>' + data2.memdType + '</td>';
+                    html += '<td>' + data2.memdSize + '</td>';
+                    html += '<td>' + data1.memPrice + '</td>';
+
+                    html += '</tr>';
+                    table.append(html)
+                }
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+            }
+        })
+    }
+</script>

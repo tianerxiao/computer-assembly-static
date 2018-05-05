@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自主装机报价系统</title>
+    <script src="js/jquery-3.1.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="js/home.js"></script>
+    <script src="js/my.js"></script>
+</head>
+<style>
+    img {
+        width: 32px;
+        height: 32px;
+    }
+</style>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">自主装机报价系统</a>
+        </div>
+        <div>
+            <!--向左对齐-->
+            <ul class="nav navbar-nav navbar-left">
+
+            </ul>
+            <!--向右对齐-->
+            <form class="navbar-form navbar-right" role="search">
+                <button class="btn btn-default" onclick="location='register.html'">
+                    注册
+                </button>
+                <button class="btn btn-default" onclick="location='login.html'">
+                    登录
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-5">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        装机配置单
+                    </h3>
+                </div>
+                <div class="list-group">
+                    <a href="#" class="list-group-item" onclick="go('CPU')">
+                        <h4 class="list-group-item-heading">
+                            CPU
+                        </h4>
+                        <div id="cpu_div" class="list-group-item-text">
+                            <!--<p class="pull-left">Intel奔腾G2130</p><span class="pull-right">￥399</span>-->
+                            <!--<br/>-->
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('主板')">
+                        <h4 class="list-group-item-heading">
+                            主板
+                        </h4>
+                        <div id="board_div" class="list-group-item-text">
+                            <!--<span class="pic"></span>-->
+
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('内存')">
+                        <h4 class="list-group-item-heading">
+                            内存
+                        </h4>
+                        <div id="mem_div" class="list-group-item-text">
+                            <!--<span class="pic"></span>-->
+
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('硬盘')">
+                        <h4 class="list-group-item-heading">
+                            硬盘
+                        </h4>
+                        <div id="disk_div" class="list-group-item-text">
+                            <!--<span class="pic"></span>-->
+
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('显卡')">
+                        <h4 class="list-group-item-heading">
+                            显卡
+                        </h4>
+                        <div id="display_div" class="list-group-item-text">
+                            <!--<span class="pic"></span>-->
+
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('电源')">
+                        <h4 class="list-group-item-heading">
+                            电源
+                        </h4>
+                        <div id="power_div" class="list-group-item-text">
+                            <!--<span class="pic"></span>-->
+
+                        </div>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('机箱')">
+                        <h4 class="list-group-item-heading">
+                            机箱
+                        </h4>
+                        <div id="shell_div" class="list-group-item-text">
+                            <!--<span class="pic"></span>-->
+
+                        </div>
+                    </a>
+                    <hr/>
+                    <a href="#" class="list-group-item">
+                        <h4 class="list-group-item-heading ">
+                            合计
+                        </h4>
+                        <div id="sum_div" class="list-group-item-text">
+                            <!--<span class="pic"></span>-->
+
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="rightSide" class="col-sm-7">
+
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    go('CPU');
+    rightDiv = $('#rightSide');
+
+    function go(name) {
+        switch (name) {
+            case 'CPU':
+                $.get('cpu.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case '主板':
+                $.get('board.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case '内存':
+                $.get('memory.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case '显卡':
+                $.get('vga.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case '电源':
+                $.get('power.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+        }
+    }
+
+
+    $(function () {
+
+    });
+
+    function select(type, name, price, id) {
+        o = null
+        switch (type) {
+            case 'cpu':
+                o = $('#cpu_div');
+                break;
+            case 'board':
+                o = $('#board_div');
+                break;
+            case 'memory':
+                o = $('#mem_div');
+                break;
+            case 'vga':
+                o = $('#display_div');
+                break;
+            case 'power':
+                o = $('#power_div');
+                break;
+        }
+        if (o != null) {
+            o.html("<p class=\"pull-left\">" + name + "</p><span class=\"pull-right\">" + price + "</span><br/>");
+        }
+    }
+
+
+</script>
+</html>

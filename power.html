@@ -1,0 +1,159 @@
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 id="choose_title_div" class="panel-title">
+                请选择筛选条件
+            </h3>
+        </div>
+        <ul id="cate_group" class="list-group cate">
+            <li class="list-group-item">
+                <div class="row center-block">
+                    <div class="col-md-2 ">
+                        标准
+                    </div>
+                    <div class="col-md-10">
+                        <a class="cate active" onclick="changeArch(null)">不限</a>
+                        <a class="cate" onclick="changeArch('ATX')">ATX</a>
+                        <a class="cate" onclick="changeArch('ITX')">ITX</a>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row center-block">
+                    <div class="col-md-2 ">
+                        功率
+                    </div>
+                    <div class="col-md-10">
+                        <a class="cate active" onclick="changePower(null)">不限</a>
+                        <a class="cate" onclick="changePower('200W')">200W</a>
+                        <a class="cate" onclick="changePower('300W')">300W</a>
+                        <a class="cate" onclick="changePower('400W')">400W</a>
+                        <a class="cate" onclick="changePower('500W')">500W</a>
+                        <a class="cate" onclick="changePower('1000W')">1000W</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                产品列表
+            </h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-responsive table-hover">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>型号</th>
+                    <th>标准</th>
+                    <th>功率</th>
+                    <th>价格</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <ul class="pager">
+                <li class="previous"><a onclick="goLast()">&larr; 上一页</a></li>
+                <li class="next"><a onclick="goNext()">下一页 &rarr;</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    which =
+        {
+            "powerdStandard": null,
+            "powerdPower": null,
+        };
+    $(function () {
+        currentPage = 0;
+        list(which, currentPage);
+    });
+
+    function refreshMark() {
+        current = $(window.event.target);
+        current.parent().children().each(function () {
+            $(this).removeClass("active")
+        });
+        current.addClass('active');
+    }
+
+
+    function changeArch(name) {
+        which.powerdStandard = name;
+        refreshMark();
+        currentPage = 0;
+        list(which, currentPage)
+    }
+
+    function changePower(name) {
+        which.powerdPower = name;
+        refreshMark();
+        currentPage = 0;
+        list(which, currentPage)
+    }
+
+    function goLast() {
+        if (currentPage != 0) {
+            currentPage -= 1;
+            list(which, currentPage)
+        }
+    }
+
+    function goNext() {
+        currentPage += 1
+        list(which, currentPage)
+    }
+
+    function list(which, page) {
+        table = $('tbody');
+        table.html('');
+        $.ajax({
+            type: "POST",
+            url: host + "/part/power-part/" + page,
+            data: JSON.stringify(which),
+            contentType: "application/json",
+            success: function (msg) {
+                data = msg.data;
+                for (i in data) {
+                    data1 = data[i].power;
+                    if (data1 == null)
+                        continue
+                    data2 = data[i].powerDetail;
+
+                    html = "<tr onclick=\"select('power'" + ",'" + data1.powerName + "','" + data1.powerPrice + "'," + data1.powerId + ")\">";
+
+                    // if (data1.cpuName.indexOf('i3') != -1) {
+                    //     html += '<td>' + '<img src="img/i3.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('i5') != -1) {
+                    //     html += '<td>' + '<img src="img/i5.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('i7') != -1) {
+                    //     html += '<td>' + '<img src="img/i7.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('奔腾') != -1) {
+                    //     html += '<td>' + '<img src="img/pentium.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('至强') != -1) {
+                    //     html += '<td>' + '<img src="img/celeron.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('赛扬') != -1) {
+                    //     html += '<td>' + '<img src="img/xeon.jpg"/>' + '</td>';
+                    // } else {
+                    html += '<td></td>'
+                    // }
+                    html += '<td>' + data1.powerName + '</td>';
+                    html += '<td>' + data2.powerdStandard + '</td>';
+                    html += '<td>' + data2.powerdPower + '</td>';
+                    html += '<td>' + data1.powerPrice + '</td>';
+
+                    html += '</tr>';
+                    table.append(html)
+                }
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+            }
+        })
+    }
+</script>

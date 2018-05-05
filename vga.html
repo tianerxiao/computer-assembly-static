@@ -1,0 +1,162 @@
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 id="choose_title_div" class="panel-title">
+                请选择筛选条件
+            </h3>
+        </div>
+        <ul id="cate_group" class="list-group cate">
+            <li class="list-group-item">
+                <div class="row center-block">
+                    <div class="col-md-2 ">
+                        芯片厂家
+                    </div>
+                    <div class="col-md-10">
+                        <a class="cate active" onclick="changeVendor(null)">不限</a>
+                        <a class="cate" onclick="changeVendor('NVIDIA')">NVIDIA</a>
+                        <a class="cate" onclick="changeVendor('AMD')">AMD</a>
+                    </div>
+                </div>
+            </li>
+            <li class="list-group-item">
+                <div class="row center-block">
+                    <div class="col-md-2 ">
+                        显存容量
+                    </div>
+                    <div class="col-md-10">
+                        <a class="cate active" onclick="changeSize(null)">不限</a>
+                        <a class="cate" onclick="changeSize('512M')">512M</a>
+                        <a class="cate" onclick="changeSize('1024M')">1024M</a>
+                        <a class="cate" onclick="changeSize('2048M')">2048M</a>
+                        <a class="cate" onclick="changeSize('6144M')">6144M</a>
+                        <a class="cate" onclick="changeSize('4096M')">4096M</a>
+                        <a class="cate" onclick="changeSize('8GB')">8GB</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                产品列表
+            </h3>
+        </div>
+        <div class="panel-body">
+            <table class="table table-responsive table-hover">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>型号</th>
+                    <th>芯片</th>
+                    <th>显存</th>
+                    <th>核心频率</th>
+                    <th>价格</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+            <ul class="pager">
+                <li class="previous"><a onclick="goLast()">&larr; 上一页</a></li>
+                <li class="next"><a onclick="goNext()">下一页 &rarr;</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    which =
+        {
+            "vgadVender": null,
+            "vgadMemory": null,
+        };
+    $(function () {
+        currentPage = 0;
+        list(which, currentPage);
+    });
+
+    function refreshMark() {
+        current = $(window.event.target);
+        current.parent().children().each(function () {
+            $(this).removeClass("active")
+        });
+        current.addClass('active');
+    }
+
+
+    function changeVendor(name) {
+        which.vgadVender = name;
+        refreshMark();
+        currentPage = 0;
+        list(which, currentPage)
+    }
+
+    function changeSize(name) {
+        which.vgadMemory = name;
+        refreshMark();
+        currentPage = 0;
+        list(which, currentPage)
+    }
+
+    function goLast() {
+        if (currentPage != 0) {
+            currentPage -= 1;
+            list(which, currentPage)
+        }
+    }
+
+    function goNext() {
+        currentPage += 1
+        list(which, currentPage)
+    }
+
+    function list(which, page) {
+        table = $('tbody');
+        table.html('');
+        $.ajax({
+            type: "POST",
+            url: host + "/part/vga-part/" + page,
+            data: JSON.stringify(which),
+            contentType: "application/json",
+            success: function (msg) {
+                data = msg.data;
+                for (i in data) {
+                    data1 = data[i].vga;
+                    if (data1 == null)
+                        continue
+                    data2 = data[i].vgaDetail;
+
+                    html = "<tr onclick=\"select('vga'" + ",'" + data1.vgaName + "','" + data1.vgaPrice + "'," + data1.vgaId + ")\">";
+
+                    // if (data1.cpuName.indexOf('i3') != -1) {
+                    //     html += '<td>' + '<img src="img/i3.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('i5') != -1) {
+                    //     html += '<td>' + '<img src="img/i5.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('i7') != -1) {
+                    //     html += '<td>' + '<img src="img/i7.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('奔腾') != -1) {
+                    //     html += '<td>' + '<img src="img/pentium.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('至强') != -1) {
+                    //     html += '<td>' + '<img src="img/celeron.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('赛扬') != -1) {
+                    //     html += '<td>' + '<img src="img/xeon.jpg"/>' + '</td>';
+                    // } else {
+                    html += '<td></td>'
+                    // }
+                    html += '<td>' + data1.vgaName + '</td>';
+                    html += '<td>' + data2.vgadVender + '</td>';
+                    html += '<td>' + data2.vgadMemory + '</td>';
+                    html += '<td>' + data2.vgadCore + '</td>';
+                    html += '<td>' + data1.vgaPrice + '</td>';
+
+                    html += '</tr>';
+                    table.append(html)
+                }
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+            }
+        })
+    }
+</script>
