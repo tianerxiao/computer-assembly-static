@@ -1,48 +1,60 @@
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 id="choose_title_div" class="panel-title">
-                请选择筛选条件
-            </h3>
+            <div class="panel-title" style="height: 35px">
+                <h4 class="navbar-left">
+                    请选择CPU筛选条件
+                </h4>
+                <div class="navbar-form navbar-right col-lg-8" style="margin-top: 0px">
+                    <div class="input-group">
+                        <input type="text" id="cpu_search_div" class="form-control" placeholder="搜索配件">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" onclick="searchOnclick()" type="button">搜索</button>
+                    </span>
+                    </div>
+                </div>
+            </div>
         </div>
         <ul id="cate_group" class="list-group cate">
-            <li class="list-group-item">
-                <div class="row center-block">
-                    <div class="col-md-2 ">
-                        品牌
+                <li class="list-group-item">
+                    <div class="row center-block">
+                        <div class="col-md-2 ">
+                            品牌
+                        </div>
+                        <div class="col-md-10">
+                            <a class="cate active" onclick="changeVendor(null)">不限</a>
+                            <a class="cate" onclick="changeVendor('Intel')">Intel</a>
+                            <a class="cate" onclick="changeVendor('AMD')">AMD</a>
+                        </div>
                     </div>
-                    <div class="col-md-10">
-                        <a class="cate active" onclick="changeVendor(null)">不限</a>
-                        <a class="cate" onclick="changeVendor('Intel')">Intel</a>
-                        <a class="cate" onclick="changeVendor('AMD')">AMD</a>
+                </li>
+                <li class="list-group-item">
+                    <div class="row center-block">
+                        <div class="col-md-2 ">
+                            核数
+                        </div>
+                        <div class="col-md-10">
+                            <a class="cate active" onclick="changeCore(null)">不限</a>
+                            <a class="cate" onclick="changeCore('单核')">单核</a>
+                            <a class="cate" onclick="changeCore('双核')">双核</a>
+                            <a class="cate" onclick="changeCore('四核')">四核</a>
+                            <a class="cate" onclick="changeCore('六核')">六核</a>
+                            <a class="cate" onclick="changeCore('八核')">八核</a>
+                            <a class="cate" onclick="changeCore('十核')">十核</a>
+                            <a class="cate" onclick="changeCore('十二核')">十二核</a>
+                            <a class="cate" onclick="changeCore('十六核')">十六核</a>
+                        </div>
                     </div>
-                </div>
-            </li>
-            <li class="list-group-item">
-                <div class="row center-block">
-                    <div class="col-md-2 ">
-                        核数
-                    </div>
-                    <div class="col-md-10">
-                        <a class="cate active" onclick="changeCore(null)">不限</a>
-                        <a class="cate" onclick="changeCore('单核')">单核</a>
-                        <a class="cate" onclick="changeCore('双核')">双核</a>
-                        <a class="cate" onclick="changeCore('四核')">四核</a>
-                        <a class="cate" onclick="changeCore('六核')">六核</a>
-                        <a class="cate" onclick="changeCore('八核')">八核</a>
-                        <a class="cate" onclick="changeCore('十核')">十核</a>
-                        <a class="cate" onclick="changeCore('十二核')">十二核</a>
-                        <a class="cate" onclick="changeCore('十六核')">十六核</a>
-                    </div>
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
     </div>
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 class="panel-title">
-                产品列表
-            </h3>
+            <div class="panel-title">
+                <h4>
+                    产品列表
+                </h4>
+            </div>
         </div>
         <div class="panel-body">
             <table class="table table-responsive table-hover">
@@ -78,7 +90,7 @@
         };
     $(function () {
         currentPage = 0;
-        listCpu(which, currentPage);
+        listCpu(which,currentPage);
 
     });
 
@@ -95,29 +107,37 @@
         which.cpudVendor = name;
         refreshMark();
         currentPage = 0;
-        listCpu(which, currentPage)
+        listCpu(which,currentPage)
     }
 
     function changeCore(name) {
         which.cpudCore = name;
         refreshMark();
         currentPage = 0;
-        listCpu(which, currentPage)
+        listCpu(which,currentPage)
     }
 
     function goLast() {
         if (currentPage != 0) {
             currentPage -= 1;
-            listCpu(which, currentPage)
+            if($("#cpu_search_div").val() != null){
+                searchCpu(currentPage);
+            }else {
+                listCpu(which,currentPage)
+            }
         }
     }
 
     function goNext() {
         currentPage += 1
-        listCpu(which, currentPage)
+        if($("#cpu_search_div").val() != null){
+            searchCpu(currentPage);
+        }else {
+            listCpu(which,currentPage)
+        }
     }
 
-    function listCpu(which, page) {
+    function listCpu(which,page) {
         table = $('tbody');
         table.html('');
         $.ajax({
@@ -161,6 +181,68 @@
             },
             error: function (msg) {
                 alert("无法连接到服务器，请重新尝试")
+                table = $('tbody');
+                table.html('');
+            }
+        })
+    }
+    function searchOnclick() {
+        table = $('tbody');
+        table.html('');
+        currentPage=0;
+        searchCpu(currentPage);
+    }
+    function searchCpu(spage) {
+        table = $('tbody');
+        table.html('');
+        data = {
+            part:"CPU",
+            searchContent:$("#cpu_search_div").val(),
+            page:spage
+        }
+        $.ajax({
+            type:"POST",
+            url:host+"/part/search-part",
+            data:JSON.stringify(data),
+            contentType:"application/json",
+            success:function (msg) {
+                data = msg.data;
+                for (i in data) {
+                    cpu = data[i].cpu;
+                    cpud = data[i].cpuDetail;
+
+                    html = "<tr onclick=\"select('cpu'" + ",'" + cpu.cpuName + "','" + cpu.cpuPrice + "'," + cpu.cpuId + ")\">";
+
+                    if (cpu.cpuName.indexOf('i3') != -1) {
+                        html += '<td>' + '<img src="img/i3.jpg"/>' + '</td>';
+                    } else if (cpu.cpuName.indexOf('i5') != -1) {
+                        html += '<td>' + '<img src="img/i5.jpg"/>' + '</td>';
+                    } else if (cpu.cpuName.indexOf('i7') != -1) {
+                        html += '<td>' + '<img src="img/i7.jpg"/>' + '</td>';
+                    } else if (cpu.cpuName.indexOf('奔腾') != -1) {
+                        html += '<td>' + '<img src="img/pentium.jpg"/>' + '</td>';
+                    } else if (cpu.cpuName.indexOf('至强') != -1) {
+                        html += '<td>' + '<img src="img/celeron.jpg"/>' + '</td>';
+                    } else if (cpu.cpuName.indexOf('赛扬') != -1) {
+                        html += '<td>' + '<img src="img/xeon.jpg"/>' + '</td>';
+                    } else {
+                        html += '<td></td>'
+                    }
+                    html += '<td>' + cpu.cpuName + '</td>';
+                    html += '<td>' + cpud.cpudVendor + '</td>';
+                    html += '<td>' + cpud.cpudCore + '</td>';
+                    html += '<td>' + cpud.cpudMainfreq + '</td>';
+                    html += '<td>' + cpud.cpudCraft + '</td>';
+                    html += '<td>' + cpu.cpuPrice + '</td>';
+
+                    html += '</tr>';
+                    table.append(html)
+                }
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+                table = $('tbody');
+                table.html('');
             }
         })
     }

@@ -41,17 +41,28 @@
 </nav>
 <div class="container">
     <div class="row">
-        <h3>
-            hello world
-        </h3>
+        <div class="col-lg-6"></div>
+        <div class="col-lg-6 ">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="搜索配置单">
+                <span class="input-group-btn">
+						<button class="btn btn-default" type="button">
+							搜索
+						</button>
+                </span>
+            </div><!-- /input-group -->
+        </div>
     </div>
+    <div class="row">.</div>
     <div class="row">
         <div class="col-sm-5">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">
-                        装机配置单
-                    </h3>
+                    <div class="panel-title">
+                        <h4>
+                            产品列表
+                        </h4>
+                    </div>
                 </div>
                 <div class="list-group">
                     <a href="#" class="list-group-item" onclick="go('CPU')">
@@ -69,7 +80,6 @@
                         </h4>
                         <div id="board_div" class="list-group-item-text">
                             <!--<span class="pic"></span>-->
-
                         </div>
                     </a>
                     <a href="#" class="list-group-item" onclick="go('内存')">
@@ -78,7 +88,6 @@
                         </h4>
                         <div id="mem_div" class="list-group-item-text">
                             <!--<span class="pic"></span>-->
-
                         </div>
                     </a>
                     <a href="#" class="list-group-item" onclick="go('硬盘')">
@@ -117,7 +126,6 @@
 
                         </div>
                     </a>
-                    <hr/>
                     <a href="#" class="list-group-item">
                         <h4 class="list-group-item-heading ">
                             合计

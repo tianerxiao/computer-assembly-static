@@ -1,9 +1,19 @@
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 id="choose_title_div" class="panel-title">
-                请选择筛选条件
-            </h3>
+            <div class="panel-title" style="height: 35px">
+                <h4 id="choose_title_div" class="navbar-left">
+                    请选择内存筛选条件
+                </h4>
+                <div class="navbar-form navbar-right col-lg-8" style="margin-top: 0px">
+                    <div class="input-group">
+                        <input type="text" id="search_memory" class="form-control" placeholder="搜索配件">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" onclick="searchOnclick()" type="button">搜索</button>
+                    </span>
+                    </div>
+                </div>
+            </div>
         </div>
         <ul id="cate_group" class="list-group cate">
             <li class="list-group-item">
@@ -74,7 +84,7 @@
         };
     $(function () {
         currentPage = 0;
-        list(which, currentPage);
+        list(which);
     });
 
     function refreshMark() {
@@ -90,34 +100,42 @@
         which.memdType = name;
         refreshMark();
         currentPage = 0;
-        list(which, currentPage)
+        list(which)
     }
 
     function changeSize(name) {
         which.memdSize = name;
         refreshMark();
         currentPage = 0;
-        list(which, currentPage)
+        list(which)
     }
 
     function goLast() {
         if (currentPage != 0) {
             currentPage -= 1;
-            list(which, currentPage)
+            if($("#search_memory").val() != null){
+                searchMemory();
+            }else {
+                list(which)
+            }
         }
     }
 
     function goNext() {
         currentPage += 1
-        list(which, currentPage)
+        if($("#search_memory").val() != null){
+            searchMemory();
+        }else {
+            list(which)
+        }
     }
 
-    function list(which, page) {
+    function list(which) {
         table = $('tbody');
         table.html('');
         $.ajax({
             type: "POST",
-            url: host + "/part/memory-part/" + page,
+            url: host + "/part/memory-part/" + currentPage,
             data: JSON.stringify(which),
             contentType: "application/json",
             success: function (msg) {
@@ -154,6 +172,68 @@
             },
             error: function (msg) {
                 alert("无法连接到服务器，请重新尝试")
+                table = $('tbody');
+                table.html('');
+            }
+        })
+    }
+
+    function searchOnclick() {
+        table = $('tbody');
+        table.html('');
+        currentPage=0;
+        searchMemory()
+    }
+
+    function searchMemory() {
+        table = $('tbody');
+        table.html('');
+        data = {
+            part:"内存",
+            searchContent:$("#search_memory").val(),
+            page:currentPage
+        }
+        $.ajax({
+            type:"POST",
+            url:host+"/part/search-part",
+            data:JSON.stringify(data),
+            contentType:"application/json",
+            success: function (msg) {
+                data = msg.data;
+                for (i in data) {
+                    data1 = data[i].memory;
+                    data2 = data[i].memoryDetail;
+
+                    html = "<tr onclick=\"select('memory'" + ",'" + data1.memName + "','" + data1.memPrice + "'," + data1.memId + ")\">";
+
+                    // if (data1.cpuName.indexOf('i3') != -1) {
+                    //     html += '<td>' + '<img src="img/i3.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('i5') != -1) {
+                    //     html += '<td>' + '<img src="img/i5.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('i7') != -1) {
+                    //     html += '<td>' + '<img src="img/i7.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('奔腾') != -1) {
+                    //     html += '<td>' + '<img src="img/pentium.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('至强') != -1) {
+                    //     html += '<td>' + '<img src="img/celeron.jpg"/>' + '</td>';
+                    // } else if (data1.cpuName.indexOf('赛扬') != -1) {
+                    //     html += '<td>' + '<img src="img/xeon.jpg"/>' + '</td>';
+                    // } else {
+                    html += '<td></td>'
+                    // }
+                    html += '<td>' + data1.memName + '</td>';
+                    html += '<td>' + data2.memdType + '</td>';
+                    html += '<td>' + data2.memdSize + '</td>';
+                    html += '<td>' + data1.memPrice + '</td>';
+
+                    html += '</tr>';
+                    table.append(html)
+                }
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+                table = $('tbody');
+                table.html('');
             }
         })
     }
