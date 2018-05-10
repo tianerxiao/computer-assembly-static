@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自主装机报价系统</title>
+    <script src="js/jquery-3.1.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="js/home.js"></script>
+    <script src="js/my.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="main.html">自主装机报价系统</a>
+        </div>
+        <div>
+            <!--向左对齐-->
+            <ul class="nav navbar-nav navbar-left">
+
+            </ul>
+            <!--向右对齐-->
+            <form id="navbar_form" class="navbar-form navbar-right" role="search">
+                <!--<button class="btn btn-default" onclick="location='login.html'">-->
+                    <!--登录-->
+                <!--</button>-->
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                            订单信息
+                    </h4>
+                </div>
+                <div class="list-group">
+                    <a href="#" class="list-group-item" onclick="go('')">
+                        <h4 class="list-group-item-heading">
+
+                        </h4>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('')">
+                        <h4 class="list-group-item-heading">
+
+                        </h4>
+                    </a>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        用户信息
+                    </h4>
+                </div>
+                <div class="list-group">
+                    <a href="#" class="list-group-item" onclick="go('')">
+                        <h4 class="list-group-item-heading">
+                            基本信息
+                        </h4>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('')">
+                        <h4 class="list-group-item-heading">
+                            修改信息
+                        </h4>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('')">
+                        <h4 class="list-group-item-heading">
+                            修改密码
+                        </h4>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="rightSide" class="col-sm-9">
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    rightDiv = $('#rightSide');
+
+    function go(name) {
+        switch (name) {
+            case 'CPU':
+                $.get('cpu.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case '主板':
+                $.get('board.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case '内存':
+                $.get('memory.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case '显卡':
+                $.get('vga.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case '电源':
+                $.get('power.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+        }
+    }
+
+
+    $(function () {
+        setInterval("checkLogin()",1*500)
+    });
+
+    function checkLogin() {
+        $.ajax({
+            type: "GET",
+            url: host + "/user/session",
+            xhrFields:{
+                withCredentials: true
+            },
+            success: function (msg) {
+                navbarForm = $('#navbar_form')
+                if(msg.code == 401) {
+                    window.location.href = "main.html"
+                }
+                if (msg.code == 200){
+                    data = msg.data
+                    userInfo = data.userInfo
+                    navbarForm.html("<a style='margin-right: 20px;' href='user.html'>"+userInfo.userName+"</a>" +
+                        "<a class='btn btn-default' onclick='removeSession()'>注销</a>")
+                }
+            }
+        })
+    }
+
+    function removeSession() {
+        $.ajax({
+            type: "DELETE",
+            url: host + "/user/session",
+            xhrFields:{
+                withCredentials: true
+            },
+            success: function (msg) {
+                window.location.href = "main.html"
+            }
+        })
+    }
+
+
+
+</script>
+</html>

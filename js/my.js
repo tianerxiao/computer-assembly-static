@@ -20,22 +20,3 @@ $(function () {
         timeout: 10000
     });
 });
-
-function logout() {
-    function register() {
-        var o = $('#form1').serializeObject();
-        localStorage.setItem("userkey", null);
-        $.ajax({
-            type: "DELETE",
-            url: host + "/user/session",
-            data: JSON.stringify(o),
-            contentType: "application/json",
-            success: function (msg) {
-                location = 'main.html'
-            },
-            error: function (msg) {
-                alert("无法连接到服务器，请重新尝试")
-            }
-        })
-    }
-}
