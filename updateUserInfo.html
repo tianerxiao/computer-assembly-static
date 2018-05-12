@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<h1>修改个人信息</h1>
+<div class="row">
+    <div class="col-md-7">
+        <div class="panel panel-default">
+            <div class="panel-heading layui-bg-cyan">
+                <h3 class="panel-title"></h3>
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">姓名</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="name" placeholder="请输入姓名">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-sm-2 control-label">邮箱</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="email" placeholder="请输入邮箱">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="col-sm-2 control-label">手机</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="phone" placeholder="请输入手机号">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="text" id="buttonClick" onclick="updateInfo()" class="btn layui-bg-cyan btn-default">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function  updateInfo() {
+        var userInfo = {
+            userId:$("#userId").val(),
+            userName:$("#name").val(),
+            userEmail:$("#email").val(),
+            userPhone:$("#phone").val()
+        }
+        $.ajax({
+            cache:false,
+            type:"PUT",
+            url:host+"/user/user-info",
+            data:JSON.stringify(userInfo),
+            contentType:"application/json",
+            async:false,
+            xhrFields:{
+                withCredentials: true
+            },
+            success:function (msg) {
+                if(msg.code == 200){
+                    alert(msg.data)
+                    window.location.href="#"
+                }
+                if(msg.code == 400){
+                    alert(msg.data)
+                    window.location.href="#"
+                }
+            }
+        })
+    }
+</script>

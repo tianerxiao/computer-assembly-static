@@ -206,23 +206,9 @@
                         continue
                     data2 = data[i].vgaDetail;
 
-                    html = "<tr onclick=\"select('vga'" + ",'" + data1.vgaName + "','" + data1.vgaPrice + "'," + data1.vgaId + ")\">";
+                    html = "<tr onclick=\"select('vga'" + ",'" + data1.vgaName + "','" + data1.vgaPrice + "'," + data1.vgaDescribe + "'," + data1.vgaId + ")\">";
 
-                    // if (data1.cpuName.indexOf('i3') != -1) {
-                    //     html += '<td>' + '<img src="img/i3.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('i5') != -1) {
-                    //     html += '<td>' + '<img src="img/i5.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('i7') != -1) {
-                    //     html += '<td>' + '<img src="img/i7.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('奔腾') != -1) {
-                    //     html += '<td>' + '<img src="img/pentium.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('至强') != -1) {
-                    //     html += '<td>' + '<img src="img/celeron.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('赛扬') != -1) {
-                    //     html += '<td>' + '<img src="img/xeon.jpg"/>' + '</td>';
-                    // } else {
                     html += '<td></td>'
-                    // }
                     html += '<td>' + data1.vgaName + '</td>';
                     html += '<td>' + data2.vgadVender + '</td>';
                     html += '<td>' + data2.vgadMemory + '</td>';

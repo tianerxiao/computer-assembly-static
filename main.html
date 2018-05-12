@@ -90,15 +90,6 @@
                             <!--<span class="pic"></span>-->
                         </div>
                     </a>
-                    <a href="#" class="list-group-item" onclick="go('硬盘')">
-                        <h4 class="list-group-item-heading">
-                            硬盘
-                        </h4>
-                        <div id="disk_div" class="list-group-item-text">
-                            <!--<span class="pic"></span>-->
-
-                        </div>
-                    </a>
                     <a href="#" class="list-group-item" onclick="go('显卡')">
                         <h4 class="list-group-item-heading">
                             显卡
@@ -117,15 +108,6 @@
 
                         </div>
                     </a>
-                    <a href="#" class="list-group-item" onclick="go('机箱')">
-                        <h4 class="list-group-item-heading">
-                            机箱
-                        </h4>
-                        <div id="shell_div" class="list-group-item-text">
-                            <!--<span class="pic"></span>-->
-
-                        </div>
-                    </a>
                     <a href="#" class="list-group-item">
                         <h4 class="list-group-item-heading ">
                             合计
@@ -136,6 +118,18 @@
                         </div>
                     </a>
                 </div>
+                <div class="panel-footer">
+                    <form role="form">
+                        <div class="form-group">
+                            <label>配置单名称</label>
+                            <input type="text" id="partTableName" class="form-control">
+                            <label>配置单描述</label>
+                            <textarea class="form-control" id="partTableDescribe" rows="3"></textarea>
+                            <br>
+                            <button type="submit"  id="buttonClick" onclick="postOrder();" class="btn layui-bg-cyan btn-default">提交</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         <div id="rightSide" class="col-sm-7">
@@ -143,11 +137,65 @@
         </div>
     </div>
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    模态框（Modal）标题
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <label class="control-label col-md-1">类型</label>
+                            <div class="col-md-4">
+                                <p class="control-label" style="text-align: left" id="type"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">型号</label>
+                            <div class="col-md-4">
+                                <p class="control-label" style="text-align: left" id="name"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">价格</label>
+                            <div class="col-md-4">
+                                <p class="control-label" style="text-align: left" id="price"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-md-1">详细参数</label>
+                            <div class="col-md-4">
+                                <p class="control-label" style="text-align: left" id="describe"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 </body>
 <script>
     go('CPU');
     rightDiv = $('#rightSide');
-
+    myModal1 = $("#myModal1");
+    partType=$("#type")
+    partName=$("#name")
+    partPrice=$("#price")
+    partDescribe=$("#describe")
+    var orderCpu,orderBoard,orderMemory,orderVga,orderPower;
     function go(name) {
         switch (name) {
             case 'CPU':
@@ -202,8 +250,8 @@
                 }
                 if (msg.code == 200){
                     data = msg.data
-                    userInfo = data.userInfo
-                    navbarForm.html("<a style='margin-right: 20px;' href='user.html'>"+userInfo.userName+"</a>" +
+                    userAccount = data.userAccount
+                    navbarForm.html("<a style='margin-right: 20px;' href='user.html'>"+userAccount.userId+"</a>" +
                         "<a class='btn btn-default' onclick='removeSession()'>注销</a>")
                 }
             }
@@ -223,29 +271,80 @@
         })
     }
 
-    function select(type, name, price, id) {
+    function select(type, name, price,describe, id) {
         o = null
         switch (type) {
             case 'cpu':
                 o = $('#cpu_div');
+                orderCpu = id;
                 break;
             case 'board':
                 o = $('#board_div');
+                orderBoard = id
                 break;
             case 'memory':
                 o = $('#mem_div');
+                orderMemory = id
                 break;
             case 'vga':
                 o = $('#display_div');
+                orderVga = id
                 break;
             case 'power':
                 o = $('#power_div');
+                orderPower = id
                 break;
         }
         if (o != null) {
             o.html("<p class=\"pull-left\">" + name + "</p><span class=\"pull-right\">" + price + "</span><br/>");
         }
+        var ss = new Array();
+        ss = describe.split("；")
+        describe = ""
+        ss.forEach(function (item) {
+            describe += item +"<br>"
+        })
+        partType.html(type)
+        partName.html(name)
+        partPrice.html(price)
+        partDescribe.html(describe)
+        myModal1.modal('show')
     }
 
+    function postOrder() {
+        var computerOrder = null
+
+        var computerPart = {
+            cpuId:orderCpu,
+            boardId:orderBoard,
+            memId:orderMemory,
+            powerId:orderPower,
+            vgaId:orderVga,
+            partTableName:$("#partTableName").val(),
+            partTableDescribe:$("#partTableDescribe").val()
+        }
+
+        $.ajax({
+            cache:false,
+            type:"POST",
+            url:host+"/order/computerPart",
+            data:JSON.stringify(computerPart),
+            contentType:"application/json",
+            async:false,
+            xhrFields:{
+                withCredentials: true
+            },
+            success:function (msg) {
+                if(msg.code == 200){
+                    alert(msg.data)
+                    window.location.href="#"
+                }
+                if(msg.code == 400){
+                    alert(msg.data)
+                    window.location.href="#"
+                }
+            }
+        })
+    }
 </script>
 </html>

@@ -88,7 +88,7 @@
         localStorage.setItem("userkey", null);
         $.ajax({
             type: "POST",
-            url: host + "/user/user",
+            url: host + "/user/user-account",
             data: JSON.stringify(o),
             contentType: "application/json",
             success: function (msg) {

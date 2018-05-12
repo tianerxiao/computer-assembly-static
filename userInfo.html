@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<div class="panel panel-default">
+    <div class="panel-heading">个人信息</div>
+    <table id="table1" class="table">
+    </table>
+</div>
+<script>
+    $(function () {
+        $.ajax({
+            type: "GET",
+            url: host + "/user/session",
+            xhrFields:{
+                withCredentials: true
+            },
+            success: function (msg) {
+                table1 = $('#table1')
+                if(msg.code == 401) {
+                    table1.html("")
+                }
+                if (msg.code == 200){
+                    data = msg.data
+                    userInfo = data.userInfo
+                    table1.append(
+                        "<tbody><tr><td>" +
+                        "姓名" +
+                        "</td><td>" +
+                        userInfo.userName +
+                        "</td></tr>"+
+
+                        "<tr><td>" +
+                        "邮箱" +
+                        "</td><td>" +
+                        userInfo.userEmail +
+                        "</td></tr>" +
+
+                        "<tr><td>" +
+                        "手机" +
+                        "</td><td>" +
+                        userInfo.userPhone +
+                        "</td></tr></tbody>")
+                }
+            }
+        })
+    })
+</script>
