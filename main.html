@@ -146,7 +146,7 @@
                     &times;
                 </button>
                 <h4 class="modal-title" id="myModalLabel">
-                    模态框（Modal）标题
+                    配件详细参数
                 </h4>
             </div>
             <div class="modal-body">
@@ -196,6 +196,7 @@
     partPrice=$("#price")
     partDescribe=$("#describe")
     var orderCpu,orderBoard,orderMemory,orderVga,orderPower;
+    var cpuPrice=0,boardPrice=0,memPrice=0,vgaPrice=0,powerPrice=0,priceSum=0
     function go(name) {
         switch (name) {
             case 'CPU':
@@ -277,27 +278,51 @@
             case 'cpu':
                 o = $('#cpu_div');
                 orderCpu = id;
+                if(price != "暂无报价" ){
+                    numStr=price.split("￥")
+                    cpuPrice= parseInt(numStr[1])
+                }
                 break;
             case 'board':
                 o = $('#board_div');
                 orderBoard = id
+                if(price != "已下市") {
+                    numStr = price.split("￥")
+                    boardPrice = parseInt(numStr[1])
+                }
                 break;
             case 'memory':
                 o = $('#mem_div');
                 orderMemory = id
+                if(price != "暂无报价") {
+                    numStr = price.split("￥")
+                    memPrice = parseInt(numStr[1])
+                }
                 break;
             case 'vga':
                 o = $('#display_div');
                 orderVga = id
+                if(price != "暂无报价") {
+                    numStr = price.split("￥")
+                    vgaPrice = parseInt(numStr[1])
+                }
                 break;
             case 'power':
                 o = $('#power_div');
                 orderPower = id
+                if(price != "暂无报价") {
+                    numStr = price.split("￥")
+                    powerPrice = parseInt(numStr[1])
+                }
                 break;
         }
         if (o != null) {
             o.html("<p class=\"pull-left\">" + name + "</p><span class=\"pull-right\">" + price + "</span><br/>");
         }
+        priceSum = 0
+        priceSum = cpuPrice+boardPrice+memPrice+vgaPrice+powerPrice
+        o = $("#sum_div")
+        o.html("<span class=\"pull-right\">￥" + priceSum.toString() + "</span><br/>");
         var ss = new Array();
         ss = describe.split("；")
         describe = ""
@@ -312,7 +337,9 @@
     }
 
     function postOrder() {
-        var computerOrder = null
+        var computerOrder = {
+            price:priceSum
+        }
 
         var computerPart = {
             cpuId:orderCpu,
@@ -324,11 +351,16 @@
             partTableDescribe:$("#partTableDescribe").val()
         }
 
+        var orderDto = {
+            computerPart:computerPart,
+            computerOrder:computerOrder
+        }
+
         $.ajax({
             cache:false,
             type:"POST",
-            url:host+"/order/computerPart",
-            data:JSON.stringify(computerPart),
+            url:host+"/order/order",
+            data:JSON.stringify(orderDto),
             contentType:"application/json",
             async:false,
             xhrFields:{
@@ -337,11 +369,13 @@
             success:function (msg) {
                 if(msg.code == 200){
                     alert(msg.data)
-                    window.location.href="#"
+                    window.location.href = "#"
                 }
                 if(msg.code == 400){
                     alert(msg.data)
-                    window.location.href="#"
+                }
+                if(msg.code == 401){
+                    alert(msg.data)
                 }
             }
         })

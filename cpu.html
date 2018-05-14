@@ -186,6 +186,7 @@
             }
         })
     }
+
     function searchOnclick() {
         table = $('tbody');
         table.html('');
@@ -211,7 +212,7 @@
                     cpu = data[i].cpu;
                     cpud = data[i].cpuDetail;
 
-                    html = "<tr onclick=\"select('cpu'" + ",'" + cpu.cpuName + "','" + cpu.cpuPrice + "'," + cpu.cpuId + ")\">";
+                    html = "<tr onclick=\"select('cpu'" + ",'" + cpu.cpuName + "','" + cpu.cpuPrice + "','" + cpu.cpuDescribe + "',"+ cpu.cpuId + ")\">";
 
                     if (cpu.cpuName.indexOf('i3') != -1) {
                         html += '<td>' + '<img src="img/i3.jpg"/>' + '</td>';
