@@ -1,4 +1,4 @@
-let ip = "localhost:8080";
+let ip = "125.217.34.8:8080";
 let host = "http://" + ip;
 $.fn.serializeObject = function () {
     var o = {};

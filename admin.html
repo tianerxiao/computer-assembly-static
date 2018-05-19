@@ -36,18 +36,38 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        订单信息
+                        电脑配件管理
                     </h4>
                 </div>
                 <div class="list-group">
-                    <a href="#" class="list-group-item" onclick="go('orderList')">
+                    <a class="list-group-item" onclick="go('addCPU')">
                         <h4 class="list-group-item-heading">
-                            我的订单
+                            添加CPU
                         </h4>
                     </a>
-                    <a href="#" class="list-group-item" onclick="go('')">
+                    <a class="list-group-item" onclick="go('addBoard')">
                         <h4 class="list-group-item-heading">
-
+                            添加主板
+                        </h4>
+                    </a>
+                    <a class="list-group-item" onclick="go('addMemory')">
+                        <h4 class="list-group-item-heading">
+                            添加内存
+                        </h4>
+                    </a>
+                    <a class="list-group-item" onclick="go('addVga')">
+                        <h4 class="list-group-item-heading">
+                            添加显卡
+                        </h4>
+                    </a>
+                    <a class="list-group-item" onclick="go('addPower')">
+                        <h4 class="list-group-item-heading">
+                            添加电源
+                        </h4>
+                    </a>
+                    <a class="list-group-item" onclick="go('delPart')">
+                        <h4 class="list-group-item-heading">
+                            删除配件
                         </h4>
                     </a>
                 </div>
@@ -55,25 +75,78 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        用户信息
+                        客户管理
                     </h4>
                 </div>
                 <div class="list-group">
-                    <a href="#" class="list-group-item" onclick="go('userinfo')">
+                    <a class="list-group-item" onclick="go('')">
                         <h4 class="list-group-item-heading">
-                            个人信息
+                            客户信息
                         </h4>
                     </a>
-                    <a href="#" class="list-group-item" onclick="go('updateInfo')">
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        订单管理
+                    </h4>
+                </div>
+                <div class="list-group">
+                    <a class="list-group-item" onclick="go('')">
                         <h4 class="list-group-item-heading">
-                            修改信息
+                            订单列表
                         </h4>
                     </a>
-                    <a href="#" class="list-group-item" onclick="go('modifyPwd')">
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        管理员管理
+                    </h4>
+                </div>
+                <div class="list-group">
+                    <a class="list-group-item" onclick="go('addAdmin')">
                         <h4 class="list-group-item-heading">
-                            修改密码
+                            授权管理员
                         </h4>
                     </a>
+                    <a class="list-group-item" onclick="go('delAdmin')">
+                        <h4 class="list-group-item-heading">
+                            撤销管理员
+                        </h4>
+                    </a>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        装机常识管理
+                    </h4>
+                </div>
+                <div class="list-group">
+
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        新闻信息管理
+                    </h4>
+                </div>
+                <div class="list-group">
+
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        数据统计
+                    </h4>
+                </div>
+                <div class="list-group">
+
                 </div>
             </div>
         </div>
@@ -169,28 +242,43 @@
 
     function go(name) {
         switch (name) {
-            case 'modifyPwd':
-                $.get('modifyPasspwd.html', function (data) {
+            case 'addCPU':
+                $.get('addCPU.html', function (data) {
                     rightDiv.html(data)
                 });
                 break;
-            case 'updateInfo':
-                $.get('updateUserInfo.html', function (data) {
+            case 'addBoard':
+                $.get('addBoard.html', function (data) {
                     rightDiv.html(data)
                 });
                 break;
-            case 'userinfo':
-                $.get('userInfo.html', function (data) {
+            case 'addVga':
+                $.get('addVga.html', function (data) {
                     rightDiv.html(data)
                 });
                 break;
-            case 'orderList':
-                $.get('orderList.html', function (data) {
+            case 'addMemory':
+                $.get('addMemory.html', function (data) {
                     rightDiv.html(data)
                 });
                 break;
-            case '电源':
-                $.get('power.html', function (data) {
+            case 'addPower':
+                $.get('addPower.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'delPart':
+                $.get('delPart.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'addAdmin':
+                $.get('addAdmin.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'delAdmin':
+                $.get('delAdmin.html', function (data) {
                     rightDiv.html(data)
                 });
                 break;
@@ -212,12 +300,12 @@
             success: function (msg) {
                 navbarForm = $('#navbar_form')
                 if (msg.code == 401) {
-                    window.location.href = "main.html"
+                    window.location.href = "admin.html"
                 }
                 if (msg.code == 200) {
                     data = msg.data
                     userAccount = data.userAccount
-                    navbarForm.html("<a id='userId' style='margin-right: 20px;' href='user.html'>" + userAccount.userId + "</a>" +
+                    navbarForm.html("<a id='userId' style='margin-right: 20px;' href='admin.html'>" + userAccount.userId + "</a>" +
                         "<a class='btn btn-default' onclick='removeSession()'>注销</a>")
                 }
             }

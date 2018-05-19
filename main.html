@@ -30,10 +30,10 @@
             <!--向右对齐-->
             <form id="navbar_form" class="navbar-form navbar-right" role="search">
                 <!--<a class="btn btn-default" href="register.html">-->
-                    <!--注册-->
+                <!--注册-->
                 <!--</a>-->
                 <!--<a class="btn btn-default" href="login.html">-->
-                    <!--登录-->
+                <!--登录-->
                 <!--</a>-->
             </form>
         </div>
@@ -126,7 +126,9 @@
                             <label>配置单描述</label>
                             <textarea class="form-control" id="partTableDescribe" rows="3"></textarea>
                             <br>
-                            <button type="submit"  id="buttonClick" onclick="postOrder();" class="btn layui-bg-cyan btn-default">提交</button>
+                            <button type="submit" id="buttonClick" onclick="postOrder();"
+                                    class="btn layui-bg-cyan btn-default">提交
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -151,29 +153,31 @@
             </div>
             <div class="modal-body">
                 <div class="row">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="control-label col-md-1">类型</label>
-                            <div class="col-md-4">
-                                <p class="control-label" style="text-align: left" id="type"></p>
+                    <div class="col-md-12">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">类型</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="type"></p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-1">型号</label>
-                            <div class="col-md-4">
-                                <p class="control-label" style="text-align: left" id="name"></p>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">型号</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="name"></p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-1">价格</label>
-                            <div class="col-md-4">
-                                <p class="control-label" style="text-align: left" id="price"></p>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">价格</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="price"></p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-1">详细参数</label>
-                            <div class="col-md-4">
-                                <p class="control-label" style="text-align: left" id="describe"></p>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">详细参数</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="describe"></p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -191,12 +195,13 @@
     go('CPU');
     rightDiv = $('#rightSide');
     myModal1 = $("#myModal1");
-    partType=$("#type")
-    partName=$("#name")
-    partPrice=$("#price")
-    partDescribe=$("#describe")
-    var orderCpu,orderBoard,orderMemory,orderVga,orderPower;
-    var cpuPrice=0,boardPrice=0,memPrice=0,vgaPrice=0,powerPrice=0,priceSum=0
+    partType = $("#type")
+    partName = $("#name")
+    partPrice = $("#price")
+    partDescribe = $("#describe")
+    var orderCpu, orderBoard, orderMemory, orderVga, orderPower;
+    var cpuPrice = 0, boardPrice = 0, memPrice = 0, vgaPrice = 0, powerPrice = 0, priceSum = 0
+
     function go(name) {
         switch (name) {
             case 'CPU':
@@ -229,19 +234,19 @@
 
 
     $(function () {
-        setInterval("checkLogin()",1*500);
+        setInterval("checkLogin()", 1 * 500);
     });
 
     function checkLogin() {
         $.ajax({
             type: "GET",
             url: host + "/user/session",
-            xhrFields:{
+            xhrFields: {
                 withCredentials: true
             },
             success: function (msg) {
                 navbarForm = $('#navbar_form')
-                if(msg.code == 401) {
+                if (msg.code == 401) {
                     navbarForm.html("<a class=\"btn btn-default\" href=\"register.html\">\n" +
                         "                注册\n" +
                         "            </a>\n" +
@@ -249,10 +254,10 @@
                         "                登录\n" +
                         "            </a>")
                 }
-                if (msg.code == 200){
+                if (msg.code == 200) {
                     data = msg.data
                     userAccount = data.userAccount
-                    navbarForm.html("<a style='margin-right: 20px;' href='user.html'>"+userAccount.userId+"</a>" +
+                    navbarForm.html("<a style='margin-right: 20px;' href='user.html'>" + userAccount.userId + "</a>" +
                         "<a class='btn btn-default' onclick='removeSession()'>注销</a>")
                 }
             }
@@ -263,7 +268,7 @@
         $.ajax({
             type: "DELETE",
             url: host + "/user/session",
-            xhrFields:{
+            xhrFields: {
                 withCredentials: true
             },
             success: function (msg) {
@@ -272,21 +277,21 @@
         })
     }
 
-    function select(type, name, price,describe, id) {
+    function select(type, name, price, describe, id) {
         o = null
         switch (type) {
             case 'cpu':
                 o = $('#cpu_div');
                 orderCpu = id;
-                if(price != "暂无报价" ){
-                    numStr=price.split("￥")
-                    cpuPrice= parseInt(numStr[1])
+                if (price != "暂无报价") {
+                    numStr = price.split("￥")
+                    cpuPrice = parseInt(numStr[1])
                 }
                 break;
             case 'board':
                 o = $('#board_div');
                 orderBoard = id
-                if(price != "已下市") {
+                if (price != "已下市") {
                     numStr = price.split("￥")
                     boardPrice = parseInt(numStr[1])
                 }
@@ -294,7 +299,7 @@
             case 'memory':
                 o = $('#mem_div');
                 orderMemory = id
-                if(price != "暂无报价") {
+                if (price != "暂无报价") {
                     numStr = price.split("￥")
                     memPrice = parseInt(numStr[1])
                 }
@@ -302,7 +307,7 @@
             case 'vga':
                 o = $('#display_div');
                 orderVga = id
-                if(price != "暂无报价") {
+                if (price != "暂无报价") {
                     numStr = price.split("￥")
                     vgaPrice = parseInt(numStr[1])
                 }
@@ -310,7 +315,7 @@
             case 'power':
                 o = $('#power_div');
                 orderPower = id
-                if(price != "暂无报价") {
+                if (price != "暂无报价") {
                     numStr = price.split("￥")
                     powerPrice = parseInt(numStr[1])
                 }
@@ -320,14 +325,14 @@
             o.html("<p class=\"pull-left\">" + name + "</p><span class=\"pull-right\">" + price + "</span><br/>");
         }
         priceSum = 0
-        priceSum = cpuPrice+boardPrice+memPrice+vgaPrice+powerPrice
+        priceSum = cpuPrice + boardPrice + memPrice + vgaPrice + powerPrice
         o = $("#sum_div")
         o.html("<span class=\"pull-right\">￥" + priceSum.toString() + "</span><br/>");
         var ss = new Array();
         ss = describe.split("；")
         describe = ""
         ss.forEach(function (item) {
-            describe += item +"<br>"
+            describe += item + "<br>"
         })
         partType.html(type)
         partName.html(name)
@@ -338,43 +343,43 @@
 
     function postOrder() {
         var computerOrder = {
-            price:priceSum
+            price: priceSum
         }
 
         var computerPart = {
-            cpuId:orderCpu,
-            boardId:orderBoard,
-            memId:orderMemory,
-            powerId:orderPower,
-            vgaId:orderVga,
-            partTableName:$("#partTableName").val(),
-            partTableDescribe:$("#partTableDescribe").val()
+            cpuId: orderCpu,
+            boardId: orderBoard,
+            memId: orderMemory,
+            powerId: orderPower,
+            vgaId: orderVga,
+            partTableName: $("#partTableName").val(),
+            partTableDescribe: $("#partTableDescribe").val()
         }
 
         var orderDto = {
-            computerPart:computerPart,
-            computerOrder:computerOrder
+            computerPart: computerPart,
+            computerOrder: computerOrder
         }
 
         $.ajax({
-            cache:false,
-            type:"POST",
-            url:host+"/order/order",
-            data:JSON.stringify(orderDto),
-            contentType:"application/json",
-            async:false,
-            xhrFields:{
+            cache: false,
+            type: "POST",
+            url: host + "/order/order",
+            data: JSON.stringify(orderDto),
+            contentType: "application/json",
+            async: false,
+            xhrFields: {
                 withCredentials: true
             },
-            success:function (msg) {
-                if(msg.code == 200){
+            success: function (msg) {
+                if (msg.code == 200) {
                     alert(msg.data)
                     window.location.href = "#"
                 }
-                if(msg.code == 400){
+                if (msg.code == 400) {
                     alert(msg.data)
                 }
-                if(msg.code == 401){
+                if (msg.code == 401) {
                     alert(msg.data)
                 }
             }

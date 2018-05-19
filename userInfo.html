@@ -2,7 +2,7 @@
 <html lang="en">
 <div class="panel panel-default">
     <div class="panel-heading">个人信息</div>
-    <table id="table1" class="table">
+    <table id="table1" class="table table-responsive text-center table-hover">
     </table>
 </div>
 <script>
@@ -10,15 +10,15 @@
         $.ajax({
             type: "GET",
             url: host + "/user/session",
-            xhrFields:{
+            xhrFields: {
                 withCredentials: true
             },
             success: function (msg) {
                 table1 = $('#table1')
-                if(msg.code == 401) {
+                if (msg.code == 401) {
                     table1.html("")
                 }
-                if (msg.code == 200){
+                if (msg.code == 200) {
                     data = msg.data
                     userInfo = data.userInfo
                     table1.append(
@@ -26,7 +26,7 @@
                         "姓名" +
                         "</td><td>" +
                         userInfo.userName +
-                        "</td></tr>"+
+                        "</td></tr>" +
 
                         "<tr><td>" +
                         "邮箱" +
