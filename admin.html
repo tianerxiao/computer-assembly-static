@@ -79,7 +79,7 @@
                     </h4>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" onclick="go('')">
+                    <a class="list-group-item" onclick="go('userList')">
                         <h4 class="list-group-item-heading">
                             客户信息
                         </h4>
@@ -279,6 +279,11 @@
                 break;
             case 'delAdmin':
                 $.get('delAdmin.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'userList':
+                $.get('userList.html', function (data) {
                     rightDiv.html(data)
                 });
                 break;

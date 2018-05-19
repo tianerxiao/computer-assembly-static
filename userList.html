@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <h4>
+                客户列表
+            </h4>
+        </div>
+    </div>
+    <div class="panel-body">
+        <table class="table table-responsive table-hover">
+            <thead>
+            <tr>
+                <th>账号名</th>
+                <th>姓名</th>
+                <th>邮箱</th>
+                <th>手机号</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    $(function () {
+        listOrder()
+    })
+
+    function listOrder() {
+        table = $('tbody');
+        table.html('');
+        $.ajax({
+            type: "get",
+            url: host + "/user/userList/",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                data = msg.data;
+                for (i in data) {
+                    info = data[i].userInfo;
+                    html = "<tr>"
+                    html += '<td>' + info.userId + '</td>';
+                    html += '<td>' + info.userName + '</td>';
+                    html += '<td>' + info.userEmail + '</td>';
+                    html += '<td>' + info.userPhone + '</td>';
+                    html += '</tr>';
+                    table.append(html)
+                }
+                console.log(msg)
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+                table = $('tbody');
+                table.html('');
+            }
+        })
+    }
+
+</script>
