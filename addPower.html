@@ -12,7 +12,7 @@
                             <label for="name" class="center-block control-label">型号</label>
                         </div>
                         <div class="col-sm-7">
-                            <input  class="form-control" id="name">
+                            <input class="form-control" id="name">
                         </div>
                     </div>
                     <div class="form-group">
@@ -20,7 +20,7 @@
                             <label for="standard" class="center-block control-label">标准</label>
                         </div>
                         <div class="col-sm-7">
-                            <input  class="form-control" id="standard">
+                            <input class="form-control" id="standard">
                         </div>
                     </div>
                     <div class="form-group">
@@ -28,7 +28,7 @@
                             <label for="power" class="center-block control-label">功率</label>
                         </div>
                         <div class="col-sm-7">
-                            <input  class="form-control" id="power">
+                            <input class="form-control" id="power">
                         </div>
                     </div>
                     <div class="form-group">
@@ -36,12 +36,20 @@
                             <label for="price" class="center-block control-label">价格</label>
                         </div>
                         <div class="col-sm-7">
-                            <input  class="form-control" id="price">
+                            <input class="form-control" id="price">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3">
+                            <label for="describe" class="center-block control-label">详细参数</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <textarea class="form-control" id="describe" rows="5"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-4 col-sm-6">
-                            <button type="submit" id="buttonClick" onclick="btnClick();"
+                            <button type="button" id="buttonClick" onclick="btnClick();"
                                     class="btn btn-default">提交
                             </button>
                         </div>
@@ -53,53 +61,37 @@
 </div>
 
 <script>
-    function pwdSubmit() {
-        var modifyPassword = {
-            userPasswd: $("#oldPassword").val(),
-            userId: $("#newPassword1").val()
+    function btnClick() {
+        var des = '标准：' + $('#standard').val() + '；';
+        des += '功率：' + $('#power').val() + '；';
+        des += $('#describe').val()
+
+        var data = {
+            power: {
+                powerName: $('#name').val(),
+                powerPrice: $('#price').val() + '￥',
+                powerDescribe: des
+            },
+            powerDetail: {
+                powerdName: $('#name').val(),
+                powerdPower: $('#power').val(),
+                powerdStandard: $('#standard').val(),
+
+            }
         }
         $.ajax({
             cache: false,
-            type: "put",
-            url: host + "/user/user-account",
-            data: JSON.stringify(modifyPassword),
+            type: "post",
+            url: host + "/part/power",
+            data: JSON.stringify(data),
             contentType: "application/json",
             async: false,
             xhrFields: {
                 withCredentials: true
             },
             success: function (msg) {
-                if (msg.code == 200) {
-                    alert(msg.data)
-                    $.ajax({
-                        type: "DELETE",
-                        url: host + "/user/session",
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        success: function () {
-                            window.location.href = "main.html";
-                            return
-                        }
-                    })
-                }
-                if (msg.code == 400) {
-                    alert(msg.data)
-                    return
-                }
+                alert(msg.data)
             }
         })
-    }
-
-    btnClick = function () {
-        var newpwd1 = $("#newPassword1").val();
-        var newpwd2 = $("#newPassword2").val();
-        if (newpwd1 == newpwd2) {
-            pwdSubmit();
-            return
-        } else {
-            alert("新密码不相同");
-            return
-        }
     }
 </script>

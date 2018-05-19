@@ -82,13 +82,16 @@
             url: host + "/user/session",
             data: JSON.stringify(o),
             contentType: "application/json",
-            xhrFields:{
+            xhrFields: {
                 withCredentials: true
             },
             success: function (msg) {
                 console.log(msg);
+
                 if (msg.code == 200) {
-                    location = 'main.html'
+                    if (msg.data.userRole.userRole == 2) {
+                        location = 'admin.html'
+                    } else location = 'main.html'
                 }
                 else {
                     alert(msg.data);

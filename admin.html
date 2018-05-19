@@ -292,7 +292,8 @@
 
 
     $(function () {
-        setInterval("checkLogin()", 1 * 500)
+        // setInterval("checkLogin()", 1 * 500)
+        checkLogin()
     });
 
     function checkLogin() {
@@ -305,7 +306,7 @@
             success: function (msg) {
                 navbarForm = $('#navbar_form')
                 if (msg.code == 401) {
-                    window.location.href = "admin.html"
+                    window.location.href = "login.html"
                 }
                 if (msg.code == 200) {
                     data = msg.data

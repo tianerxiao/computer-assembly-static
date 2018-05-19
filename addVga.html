@@ -17,6 +17,14 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-3">
+                            <label for="vendor" class="center-block control-label">芯片产商</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <input class="form-control" id="vendor">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-3">
                             <label for="model" class="center-block control-label">芯片</label>
                         </div>
                         <div class="col-sm-7">
@@ -48,8 +56,16 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <div class="col-sm-3">
+                            <label for="describe" class="center-block control-label">详细参数</label>
+                        </div>
+                        <div class="col-sm-7">
+                            <textarea class="form-control" id="describe" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <div class="col-sm-offset-4 col-sm-6">
-                            <button type="submit" id="buttonClick" onclick="btnClick();"
+                            <button type="button" id="buttonClick" onclick="btnClick();"
                                     class="btn btn-default">提交
                             </button>
                         </div>
@@ -61,53 +77,41 @@
 </div>
 
 <script>
-    function pwdSubmit() {
-        var modifyPassword = {
-            userPasswd: $("#oldPassword").val(),
-            userId: $("#newPassword1").val()
+    function btnClick() {
+        var des = '核心数量：' + $('#core').val() + '；';
+        des += '芯片：' + $('#model').val() + '；';
+        des += '显存：' + $('#memory').val() + '；';
+        des += '核心频率：' + $('#core').val() + '；';
+        des += '核心频率：' + $('#vendor').val() + '；';
+
+        des += $('#describe').val()
+
+        var data = {
+            vga: {
+                vgaName: $('#name').val(),
+                vgaPrice: $('#price').val() + '￥',
+                vgaDescribe: des
+            },
+            vgaDetail: {
+                vgadName: $('#name').val(),
+                vgadVender: $('#vendor').val(),
+                vgadMemory: $('#memory').val(),
+                vgadModel: $('#model').val()
+            }
         }
         $.ajax({
             cache: false,
-            type: "put",
-            url: host + "/user/user-account",
-            data: JSON.stringify(modifyPassword),
+            type: "post",
+            url: host + "/part/vga",
+            data: JSON.stringify(data),
             contentType: "application/json",
             async: false,
             xhrFields: {
                 withCredentials: true
             },
             success: function (msg) {
-                if (msg.code == 200) {
-                    alert(msg.data)
-                    $.ajax({
-                        type: "DELETE",
-                        url: host + "/user/session",
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        success: function () {
-                            window.location.href = "main.html";
-                            return
-                        }
-                    })
-                }
-                if (msg.code == 400) {
-                    alert(msg.data)
-                    return
-                }
+                alert(msg.data)
             }
         })
-    }
-
-    btnClick = function () {
-        var newpwd1 = $("#newPassword1").val();
-        var newpwd2 = $("#newPassword2").val();
-        if (newpwd1 == newpwd2) {
-            pwdSubmit();
-            return
-        } else {
-            alert("新密码不相同");
-            return
-        }
     }
 </script>
