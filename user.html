@@ -40,14 +40,24 @@
                     </h4>
                 </div>
                 <div class="list-group">
-                    <a href="#" class="list-group-item" onclick="go('orderList')">
+                    <a href="#" class="list-group-item" onclick="go('userNotPayOrder')">
                         <h4 class="list-group-item-heading">
-                            我的订单
+                            未付款
                         </h4>
                     </a>
-                    <a href="#" class="list-group-item" onclick="go('')">
+                    <a href="#" class="list-group-item" onclick="go('userNotExpOrder')">
                         <h4 class="list-group-item-heading">
-
+                            未发货
+                        </h4>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('userNotSignOrder')">
+                        <h4 class="list-group-item-heading">
+                            未签收
+                        </h4>
+                    </a>
+                    <a href="#" class="list-group-item" onclick="go('userSignOrder')">
+                        <h4 class="list-group-item-heading">
+                            已签收
                         </h4>
                     </a>
                 </div>
@@ -81,88 +91,6 @@
         </div>
     </div>
 </div>
-<!-- 模态框（Modal） -->
-<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                    &times;
-                </button>
-                <h4 class="modal-title" id="myModalLabel">
-                    配件详细参数
-                </h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-
-                    <div class="col-md-12">
-                        <div class="form-horizontal">
-                            <div class="form-group">
-                                <label class="control-label col-md-2">订单号</label>
-                                <div class="col-md-10">
-                                    <p class="control-label" style="text-align: left" id="orderId"></p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">名称</label>
-                                <div class="col-md-10">
-                                    <p class="control-label" style="text-align: left" id="name"></p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">价格</label>
-                                <div class="col-md-10">
-                                    <p class="control-label" style="text-align: left" id="price"></p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">处理器</label>
-                                <div class="col-md-10">
-                                    <p class="control-label" style="text-align: left" id="cpu"></p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">主板</label>
-                                <div class="col-md-10">
-                                    <p class="control-label" style="text-align: left" id="board"></p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">内存</label>
-                                <div class="col-md-10">
-                                    <p class="control-label" style="text-align: left" id="memory"></p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">电源</label>
-                                <div class="col-md-10">
-                                    <p class="control-label" style="text-align: left" id="power"></p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">显卡</label>
-                                <div class="col-md-10">
-                                    <p class="control-label" style="text-align: left" id="vga"></p>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-md-2">备注</label>
-                                <div class="col-md-10">
-                                    <p class="control-label" style="text-align: left" id="describe"></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
-                </button>
-            </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal -->
-</div>
 </body>
 <script>
     rightDiv = $('#rightSide');
@@ -184,13 +112,23 @@
                     rightDiv.html(data)
                 });
                 break;
-            case 'orderList':
-                $.get('orderList.html', function (data) {
+            case 'userNotPayOrder':
+                $.get('userNotpayOrder.html', function (data) {
                     rightDiv.html(data)
                 });
                 break;
-            case '电源':
-                $.get('power.html', function (data) {
+            case 'userNotExpOrder':
+                $.get('userNotExpOrder.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'userNotSignOrder':
+                $.get('userNotSignOrder.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'userSignOrder':
+                $.get('userSignOrder.html', function (data) {
                     rightDiv.html(data)
                 });
                 break;
@@ -237,51 +175,6 @@
         })
     }
 
-    function modalShow(i) {
-        orderId = $("#orderId")
-        orderName = $("#name")
-        orderPrice = $("#price")
-        orderCpu = $("#cpu")
-        orderMemory = $("#memory")
-        orderBoard = $("#board")
-        orderVga = $("#vga")
-        orderPower = $("#power")
-        orderDescribe = $("#describe")
-        orderModal = $("#orderModal")
-        $.ajax({
-            type: "get",
-            url: host + "/order/order/",
-            xhrFields: {
-                withCredentials: true
-            },
-            success: function (msg) {
-                if (msg.code == 401) {
-                    alert("未登录")
-                    window.location.href = "login.html"
-                }
-                if (msg.code == 200) {
-                    data = msg.data;
-                    part = data[parseInt(i)].computerPart;
-                    order = data[parseInt(i)].computerOrder;
-                    orderId.html(order.orderId)
-                    orderName.html(part.partTableName)
-                    orderPrice.html(order.price + "￥")
-                    orderCpu.html(getName('CPU', part.cpuId).data.cpuName)
-                    orderMemory.html(getName('内存', part.memId).data.memName)
-                    orderBoard.html(getName('主板', part.boardId).data.boardName)
-                    orderVga.html(getName('显卡', part.vgaId).data.vgaName)
-                    orderPower.html(getName('电源', part.powerId).data.powerName)
-                    orderDescribe.html(part.partTableDescribe)
-
-                    // console.log()
-                    orderModal.modal('show')
-                }
-            },
-            error: function (msg) {
-                alert("无法连接到服务器，请重新尝试")
-            }
-        })
-    }
 
     function getName(type, id) {
         return $.ajax({

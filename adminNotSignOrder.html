@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <h4>
+                订单列表
+            </h4>
+        </div>
+    </div>
+    <div class="panel-body">
+        <table class="table table-responsive table-hover">
+            <thead>
+            <tr>
+                <th>订单号</th>
+                <th>用户</th>
+                <th>价格</th>
+                <th>提交时间</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    订单详情
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">订单号</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="orderId"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">用户</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="name"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">价格</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="price"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">处理器</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="cpu"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">主板</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="board"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">内存</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="memory"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">电源</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="power"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">显卡</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="vga"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">备注</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="describe"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" onclick="deleteOrder();" data-dismiss="modal">取消</button>
+                <button type="button" onclick="payModalShow()" data-dismiss="modal" class="btn btn-primary">付款</button>
+                <button type="button" class="btn btn-success" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+<script>
+    $(function () {
+        listOrder()
+    })
+
+    function listOrder() {
+        table = $('tbody');
+        table.html('');
+        $.ajax({
+            type: "get",
+            url: host + "/order/notSignOrder/",
+            xhrFields:{
+                withCredentials: true
+            },
+            success: function (msg) {
+                if(msg.code == 401){
+                    alert("未登录")
+                    window.location.href = "login.html"
+                }
+                if(msg.code == 400){
+                    table = $('tbody');
+                    table.html('');
+                }
+                data = msg.data;
+                for (i in data) {
+                    part = data[i].computerPart;
+                    order = data[i].computerOrder;
+                    html = "<tr onclick=\"notSignModalShow('"+i+"')\">"
+                    html += '<td>' + order.orderId + '</td>';
+                    html += '<td>' + part.partTableName + '</td>';
+                    html += '<td>' + order.price + '</td>';
+                    html += '<td>' + part.createTime + '</td>';
+                    html += '</tr>';
+                    table.append(html)
+                }
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+                table = $('tbody');
+                table.html('');
+            }
+        })
+    }
+
+    function notSignModalShow(i) {
+        orderId = $("#orderId")
+        orderName = $("#name")
+        orderPrice = $("#price")
+        orderCpu = $("#cpu")
+        orderMemory = $("#memory")
+        orderBoard = $("#board")
+        orderVga = $("#vga")
+        orderPower = $("#power")
+        orderDescribe = $("#describe")
+        orderModal = $("#orderModal")
+        $.ajax({
+            type: "get",
+            url: host + "/order/notSignOrder/",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                if (msg.code == 401) {
+                    alert("未登录")
+                    window.location.href = "login.html"
+                }
+                if (msg.code == 200) {
+                    data = msg.data;
+                    part = data[parseInt(i)].computerPart;
+                    order = data[parseInt(i)].computerOrder;
+                    orderId.html(order.orderId)
+                    orderName.html(part.partTableName)
+                    orderPrice.html(order.price + "￥")
+                    orderCpu.html(getName('CPU', part.cpuId).data.cpuName)
+                    orderMemory.html(getName('内存', part.memId).data.memName)
+                    orderBoard.html(getName('主板', part.boardId).data.boardName)
+                    orderVga.html(getName('显卡', part.vgaId).data.vgaName)
+                    orderPower.html(getName('电源', part.powerId).data.powerName)
+                    orderDescribe.html(part.partTableDescribe)
+                    payOrderId = order.orderId
+                    // console.log()
+                    orderModal.modal('show')
+                }
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+            }
+        })
+    }
+</script>

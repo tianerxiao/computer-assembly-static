@@ -9,12 +9,14 @@
     <link rel="stylesheet" href="css/home.css">
     <script src="js/home.js"></script>
     <script src="js/my.js"></script>
+    <link rel="stylesheet" href="css/bootstrap-multiselect.css">
+    <script src="js/bootstrap-multiselect.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="main.html">自主装机报价系统</a>
+            <a class="navbar-brand" href="main.html">自主装机报价系统后台管理</a>
         </div>
         <div>
             <!--向左对齐-->
@@ -93,9 +95,23 @@
                     </h4>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" onclick="go('')">
+                    <a class="list-group-item" onclick="go('adminNotPay')">
                         <h4 class="list-group-item-heading">
-                            订单列表
+                            未付款
+                        </h4>
+                    </a>
+                </div>
+                <div class="list-group">
+                    <a class="list-group-item" onclick="go('adminNotExp')">
+                        <h4 class="list-group-item-heading">
+                            未发货
+                        </h4>
+                    </a>
+                </div>
+                <div class="list-group">
+                    <a class="list-group-item" onclick="go('adminNotSign')">
+                        <h4 class="list-group-item-heading">
+                            已收货
                         </h4>
                     </a>
                 </div>
@@ -117,16 +133,6 @@
                             撤销管理员
                         </h4>
                     </a>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        装机常识管理
-                    </h4>
-                </div>
-                <div class="list-group">
-
                 </div>
             </div>
             <div class="panel panel-default">
@@ -287,12 +293,27 @@
                     rightDiv.html(data)
                 });
                 break;
+            case 'adminNotPay':
+                $.get('adminNotPayOrder.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'adminNotExp':
+                $.get('adminNotExpOrder.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'adminNotSign':
+                $.get('adminNotSignOrder.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
         }
     }
 
 
     $(function () {
-        // setInterval("checkLogin()", 1 * 500)
+         setInterval("checkLogin()", 1 * 500)
         checkLogin()
     });
 
@@ -311,8 +332,14 @@
                 if (msg.code == 200) {
                     data = msg.data
                     userAccount = data.userAccount
-                    navbarForm.html("<a id='userId' style='margin-right: 20px;' href='admin.html'>" + userAccount.userId + "</a>" +
-                        "<a class='btn btn-default' onclick='removeSession()'>注销</a>")
+                    userRole = data.userRole
+                    if(userRole.userRole == 1){
+                        navbarForm.html("<a style='margin-right: 20px;' href='user.html'>" + userAccount.userId + "</a>" +
+                            "<a class='btn btn-default' onclick='removeSession()'>注销</a>")
+                    }else {
+                        navbarForm.html("<a style='margin-right: 20px;' href='admin.html'>" + userAccount.userId + "</a>" +
+                            "<a class='btn btn-default' onclick='removeSession()'>注销</a>")
+                    }
                 }
             }
         })
