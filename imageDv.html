@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<div class="row">
+    <div class="col-md-7">
+        <div class="panel panel-default">
+            <div class="panel-heading layui-bg-cyan">
+                <h3 class="panel-title">添加轮播图片</h3>
+            </div>
+            <div class="panel-body">
+                <form id="uploadForm" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
+                    <!--<h4>上传Excel文件</h4>-->
+                    <input id="imageFile"  name="imageFile" type="file">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" id="fileUpload1" onclick="fileUpload();" class="btn layui-bg-cyan btn-default">提交</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function fileUpload() {
+        if(confirm("确认提交")) {
+            $.ajax({
+                url: host+"/news/fileUpload",
+                type: 'POST',
+                cache: false,
+                data: new FormData($("#uploadForm")[0]),
+                processData: false,
+                contentType: false,
+                async: false,
+                success: function (result) {
+                    alert(result.data)
+                    return true
+                },
+                error: function (err) {
+                    alert(result.data)
+                    return false
+                }
+            });
+            return true
+        }
+        return false
+    }
+</script>

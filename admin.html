@@ -111,7 +111,14 @@
                 <div class="list-group">
                     <a class="list-group-item" onclick="go('adminNotSign')">
                         <h4 class="list-group-item-heading">
-                            已收货
+                            未签收
+                        </h4>
+                    </a>
+                </div>
+                <div class="list-group">
+                    <a class="list-group-item" onclick="go('adminSign')">
+                        <h4 class="list-group-item-heading">
+                            已评价
                         </h4>
                     </a>
                 </div>
@@ -142,7 +149,16 @@
                     </h4>
                 </div>
                 <div class="list-group">
+                    <a class="list-group-item" onclick="go('imageDv')">
+                        <h4 class="list-group-item-heading">
+                            轮播图片管理
+                        </h4>
+                    </a>
+                    <a class="list-group-item" onclick="go('delAdmin')">
+                        <h4 class="list-group-item-heading">
 
+                        </h4>
+                    </a>
                 </div>
             </div>
             <div class="panel panel-default">
@@ -305,6 +321,16 @@
                 break;
             case 'adminNotSign':
                 $.get('adminNotSignOrder.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'adminSign':
+                $.get('adminSignOrder.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'imageDv':
+                $.get('imageDv.html', function (data) {
                     rightDiv.html(data)
                 });
                 break;

@@ -95,13 +95,29 @@
                                     <p class="control-label" style="text-align: left" id="describe"></p>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">付款</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="pay"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">快递</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="exp"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">发货地址</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="address"></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-warning" onclick="deleteOrder();" data-dismiss="modal">取消</button>
-                <button type="button" onclick="payModalShow()" data-dismiss="modal" class="btn btn-primary">付款</button>
                 <button type="button" class="btn btn-success" data-dismiss="modal">关闭</button>
             </div>
         </div><!-- /.modal-content -->
@@ -162,6 +178,9 @@
         orderPower = $("#power")
         orderDescribe = $("#describe")
         orderModal = $("#orderModal")
+        orderPay = $("#pay")
+        orderExp = $("#exp")
+        orderAddress = $("#address")
         $.ajax({
             type: "get",
             url: host + "/order/notSignOrder/",
@@ -186,6 +205,9 @@
                     orderVga.html(getName('显卡', part.vgaId).data.vgaName)
                     orderPower.html(getName('电源', part.powerId).data.powerName)
                     orderDescribe.html(part.partTableDescribe)
+                    orderPay.html(order.pay)
+                    orderAddress.html(order.express.split(";")[1])
+                    orderExp.html(order.express.split(";")[0])
                     payOrderId = order.orderId
                     // console.log()
                     orderModal.modal('show')
@@ -196,4 +218,5 @@
             }
         })
     }
+
 </script>

@@ -23,6 +23,12 @@
             <a class="navbar-brand" href="main.html">自主装机报价系统</a>
         </div>
         <div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">攒机</a></li>
+                <li><a href="#">留言板</a></li>
+            </ul>
+        </div>
+        <div>
             <!--向左对齐-->
             <ul class="nav navbar-nav navbar-left">
 
@@ -41,16 +47,26 @@
 </nav>
 <div class="container">
     <div class="row">
-        <div class="col-lg-6"></div>
-        <div class="col-lg-6 ">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="搜索配置单">
-                <span class="input-group-btn">
-						<button class="btn btn-default" type="button">
-							搜索
-						</button>
-                </span>
-            </div><!-- /input-group -->
+        <div id="myCarousel" class="carousel slide">
+            <!-- 轮播（Carousel）指标 -->
+            <ol id="carouselIndicators" class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+            </ol>
+            <!-- 轮播（Carousel）项目 -->
+            <div id="carouselInner" class="carousel-inner">
+                <div class="item active">
+                    <img style="height: 320px;width: 720px" src="http://localhost:8080/news/imagedv/223900F318F1C8E08C31D727A3E1D8C1.jpg" class="center-block" alt="First slide">
+                </div>
+            </div>
+            <!-- 轮播（Carousel）导航 -->
+            <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
     </div>
     <div class="row">.</div>
@@ -134,6 +150,51 @@
         </div>
         <div id="rightSide" class="col-sm-7">
 
+        </div>
+    </div>
+    <div class="row">.</div>
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h4>
+                            新闻
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h4>
+                            配置单推荐
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <h4>
+                            留言
+                        </h4>
+                    </div>
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -230,8 +291,8 @@
         }
     }
 
-
     $(function () {
+        buildImagedv();
         setInterval("checkLogin()", 1 * 500);
     });
 
@@ -392,5 +453,37 @@
             }
         })
     }
+
+    function buildImagedv() {
+        var indicatorsHtml1='',innerHtml1=''
+        $.ajax({
+            type: "GET",
+            url: host + "/news/imagedvList",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                carouselIndicators = $("#carouselIndicators")
+                carouselInner = $("#carouselInner")
+                data = msg.data
+                for (i in data){
+                    if(i==0){
+                        indicatorsHtml1 = '<li data-target="#myCarousel" data-slide-to="'+i+'" class="active"></li>'
+                        innerHtml1 = '<div class=\"item active\">'
+                        innerHtml1 += '<img style="height: 320px;width: 720px" src="'+host+"/news/imagedv/"+data[i].filename+'" class="center-block" alt="First slide">'
+                        innerHtml1 +='</div>'
+                    }else {
+                        indicatorsHtml1 += '<li data-target="#myCarousel" data-slide-to="'+i+'"></li>'
+                        innerHtml1 += '<div class=\"item \">'
+                        innerHtml1 += '<img style="height: 320px;width: 720px" src="'+host+"/news/imagedv/"+data[i].filename+'" class="center-block" alt="First slide">'
+                        innerHtml1 +='</div>'
+                    }
+                }
+                carouselIndicators.html(indicatorsHtml1)
+                carouselInner.html(innerHtml1)
+            }
+        })
+    }
+
 </script>
 </html>

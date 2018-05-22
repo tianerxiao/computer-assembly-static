@@ -257,10 +257,10 @@
     function pay() {
         alipayId = $("#alipayId")
         alipayPwd = $("#alipayPwd")
-        if(alipayId.val() ==  null){
+        if(alipayId.val() ==  ""){
             alert("请输入支付宝账号")
         }
-        if(alipayPwd.val() ==  null){
+        if(alipayPwd.val() ==  ""){
             alert("请输入支付宝密码")
         }
         var computerOrder = {
