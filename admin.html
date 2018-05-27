@@ -11,6 +11,10 @@
     <script src="js/my.js"></script>
     <link rel="stylesheet" href="css/bootstrap-multiselect.css">
     <script src="js/bootstrap-multiselect.js"></script>
+    <script src="morris.js-0.5.1/morris.js"></script>
+    <link rel="stylesheet" href="morris.js-0.5.1/morris.css">
+    <script src="morris.js-0.5.1/raphael.min.js"></script>
+
 </head>
 <body>
 <nav class="navbar navbar-default" role="navigation">
@@ -35,140 +39,144 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-3">
-            <div class="panel panel-default">
+            <div class="panel panel-success">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         电脑配件管理
                     </h4>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" onclick="go('addCPU')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('addCPU')">
                         <h4 class="list-group-item-heading">
                             添加CPU
                         </h4>
                     </a>
-                    <a class="list-group-item" onclick="go('addBoard')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('addBoard')">
                         <h4 class="list-group-item-heading">
                             添加主板
                         </h4>
                     </a>
-                    <a class="list-group-item" onclick="go('addMemory')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('addMemory')">
                         <h4 class="list-group-item-heading">
                             添加内存
                         </h4>
                     </a>
-                    <a class="list-group-item" onclick="go('addVga')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('addVga')">
                         <h4 class="list-group-item-heading">
                             添加显卡
                         </h4>
                     </a>
-                    <a class="list-group-item" onclick="go('addPower')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('addPower')">
                         <h4 class="list-group-item-heading">
                             添加电源
                         </h4>
                     </a>
-                    <a class="list-group-item" onclick="go('delPart')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('delPart')">
                         <h4 class="list-group-item-heading">
                             删除配件
                         </h4>
                     </a>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-success">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         客户管理
                     </h4>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" onclick="go('userList')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('userList')">
                         <h4 class="list-group-item-heading">
                             客户信息
                         </h4>
                     </a>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-success">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         订单管理
                     </h4>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" onclick="go('adminNotPay')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('adminNotPay')">
                         <h4 class="list-group-item-heading">
                             未付款
                         </h4>
                     </a>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" onclick="go('adminNotExp')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('adminNotExp')">
                         <h4 class="list-group-item-heading">
                             未发货
                         </h4>
                     </a>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" onclick="go('adminNotSign')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('adminNotSign')">
                         <h4 class="list-group-item-heading">
                             未签收
                         </h4>
                     </a>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" onclick="go('adminSign')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('adminSign')">
                         <h4 class="list-group-item-heading">
                             已评价
                         </h4>
                     </a>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-success">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         管理员管理
                     </h4>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" onclick="go('addAdmin')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('addAdmin')">
                         <h4 class="list-group-item-heading">
                             授权管理员
                         </h4>
                     </a>
-                    <a class="list-group-item" onclick="go('delAdmin')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('delAdmin')">
                         <h4 class="list-group-item-heading">
                             撤销管理员
                         </h4>
                     </a>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-success">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         新闻信息管理
                     </h4>
                 </div>
                 <div class="list-group">
-                    <a class="list-group-item" onclick="go('imageDv')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('imageDv')">
                         <h4 class="list-group-item-heading">
-                            轮播图片管理
+                            轮播图片
                         </h4>
                     </a>
-                    <a class="list-group-item" onclick="go('delAdmin')">
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('postNews')">
                         <h4 class="list-group-item-heading">
-
+                            新闻管理
                         </h4>
                     </a>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-success">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         数据统计
                     </h4>
                 </div>
                 <div class="list-group">
-
+                    <a class="list-group-item" style="cursor: pointer" onclick="go('count')">
+                        <h4 class="list-group-item-heading">
+                            数据统计
+                        </h4>
+                    </a>
                 </div>
             </div>
         </div>
@@ -331,6 +339,16 @@
                 break;
             case 'imageDv':
                 $.get('imageDv.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'postNews':
+                $.get('postNews.html', function (data) {
+                    rightDiv.html(data)
+                });
+                break;
+            case 'count':
+                $.get('count.html', function (data) {
                     rightDiv.html(data)
                 });
                 break;

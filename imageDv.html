@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <div class="row">
     <div class="col-md-7">
-        <div class="panel panel-default">
+        <div class="panel panel-success">
             <div class="panel-heading layui-bg-cyan">
                 <h3 class="panel-title">添加轮播图片</h3>
             </div>
             <div class="panel-body">
                 <form id="uploadForm" method="post" enctype="multipart/form-data" class="form-horizontal" role="form">
-                    <!--<h4>上传Excel文件</h4>-->
+                    <h4>上传图片文件</h4>
                     <input id="imageFile"  name="imageFile" type="file">
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
@@ -15,6 +15,33 @@
                         </div>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4>
+                        图片列表
+                    </h4>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-responsive table-hover">
+                    <thead>
+                    <tr>
+                        <th>文件名</th>
+                        <th>提交时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -32,15 +59,84 @@
                 async: false,
                 success: function (result) {
                     alert(result.data)
+                    location = 'admin.html'
                     return true
                 },
                 error: function (err) {
                     alert(result.data)
+                    location = 'admin.html'
                     return false
                 }
             });
             return true
         }
         return false
+    }
+    $(function () {
+        table = $('tbody');
+        table.html('');
+        $.ajax({
+            type: "get",
+            url: host + "/news/imagedvList/",
+            xhrFields:{
+                withCredentials: true
+            },
+            success: function (msg) {
+                if(msg.code == 401){
+                    alert("未登录")
+                    window.location.href = "login.html"
+                }
+                if(msg.code == 400){
+                    table = $('tbody');
+                    table.html('');
+                }
+                data = msg.data;
+                for (i in data) {
+                    filename = data[i].filename;
+                    createTime = data[i].createTime;
+                    html = "<tr >"
+                    html += '<td>' + filename + '</td>';
+                    html += '<td>' + createTime + '</td>';
+                    html += '<td>' + "<button type=\"button\" onclick=\"deleteImagedv('"+filename+"')\" class=\"btn btn-success\" data-dismiss=\"modal\">删除\n" + "</button>" + '</td>';
+                    html += '</tr>';
+                    table.append(html)
+                }
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+                table = $('tbody');
+                table.html('');
+            }
+        })
+    })
+    function deleteImagedv(filename) {
+        if(confirm("确定删除图片吗")){
+            $.ajax({
+                cache: false,
+                type: "DELETE",
+                url: host + "/news/imagedv/"+filename+".jpg",
+                contentType: "application/json",
+                async: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (msg) {
+                    if (msg.code == 200) {
+                        alert(msg.data)
+                        location = 'admin.html'
+                        return true
+                    }
+                    if (msg.code == 401) {
+                        alert(msg.data)
+                        location = 'admin.html'
+                        return false
+                    }
+                }
+            })
+            return true
+        }else {
+            window.location.href = "#"
+            return false
+        }
     }
 </script>

@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
         <div class="panel-heading">
             <div class="panel-title" style="height: 35px">
                 <h4 class="navbar-left">
@@ -48,7 +48,7 @@
             </li>
         </ul>
     </div>
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">
                 产品列表
@@ -66,7 +66,7 @@
                     <th>价格</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="boardTbody">
 
                 </tbody>
             </table>
@@ -115,7 +115,7 @@
     function goLast() {
         if (currentPage != 0) {
             currentPage -= 1;
-            if($("#search_board").val() != null){
+            if($("#search_board").val().length != 0){
                 searchBoard();
             }else {
                 listBoard(which)
@@ -125,7 +125,7 @@
 
     function goNext() {
         currentPage += 1
-        if($("#search_board").val() != null){
+        if($("#search_board").val().length != 0){
             searchBoard();
         }else {
             listBoard(which)
@@ -133,7 +133,7 @@
     }
 
     function listBoard(which) {
-        table = $('tbody');
+        table = $('#boardTbody');
         table.html('');
         $.ajax({
             type: "POST",
@@ -147,28 +147,12 @@
                     data2 = data[i].boardDetail;
 
                     html = "<tr onclick=\"select('board'" + ",'" + data1.boardName + "','" + data1.boardPrice +"','" + data1.boardDescribe + "'," + data1.boardId + ")\">";
-
-                    // if (data1.cpuName.indexOf('i3') != -1) {
-                    //     html += '<td>' + '<img src="img/i3.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('i5') != -1) {
-                    //     html += '<td>' + '<img src="img/i5.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('i7') != -1) {
-                    //     html += '<td>' + '<img src="img/i7.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('奔腾') != -1) {
-                    //     html += '<td>' + '<img src="img/pentium.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('至强') != -1) {
-                    //     html += '<td>' + '<img src="img/celeron.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('赛扬') != -1) {
-                    //     html += '<td>' + '<img src="img/xeon.jpg"/>' + '</td>';
-                    // } else {
-                        html += '<td></td>'
-                    // }
+                    html += '<td></td>'
                     html += '<td>' + data1.boardName + '</td>';
                     html += '<td>' + data2.boarddArch + '</td>';
                     html += '<td>' + data2.boarddCpu + '</td>';
                     html += '<td>' + data2.boarddChipset + '</td>';
                     html += '<td>' + data1.boardPrice + '</td>';
-
                     html += '</tr>';
                     table.append(html)
                 }
@@ -209,21 +193,7 @@
 
                     html = "<tr onclick=\"select('board'" + ",'" + data1.boardName + "','" + data1.boardPrice +"','" + data1.boardDescribe + "'," + data1.boardId + ")\">";
 
-                    // if (data1.cpuName.indexOf('i3') != -1) {
-                    //     html += '<td>' + '<img src="img/i3.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('i5') != -1) {
-                    //     html += '<td>' + '<img src="img/i5.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('i7') != -1) {
-                    //     html += '<td>' + '<img src="img/i7.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('奔腾') != -1) {
-                    //     html += '<td>' + '<img src="img/pentium.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('至强') != -1) {
-                    //     html += '<td>' + '<img src="img/celeron.jpg"/>' + '</td>';
-                    // } else if (data1.cpuName.indexOf('赛扬') != -1) {
-                    //     html += '<td>' + '<img src="img/xeon.jpg"/>' + '</td>';
-                    // } else {
                     html += '<td></td>'
-                    // }
                     html += '<td>' + data1.boardName + '</td>';
                     html += '<td>' + data2.boarddArch + '</td>';
                     html += '<td>' + data2.boarddCpu + '</td>';

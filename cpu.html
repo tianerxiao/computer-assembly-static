@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
         <div class="panel-heading">
             <div class="panel-title" style="height: 35px">
                 <h4 class="navbar-left">
@@ -48,13 +48,11 @@
                 </li>
             </ul>
     </div>
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
         <div class="panel-heading">
-            <div class="panel-title">
-                <h4>
-                    产品列表
-                </h4>
-            </div>
+            <h3 class="panel-title">
+                产品列表
+            </h3>
         </div>
         <div class="panel-body">
             <table class="table table-responsive table-hover">
@@ -69,7 +67,7 @@
                     <th>价格</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="cpuTbody">
 
                 </tbody>
             </table>
@@ -120,7 +118,8 @@
     function goLast() {
         if (currentPage != 0) {
             currentPage -= 1;
-            if($("#cpu_search_div").val() != null){
+            s=$("#cpu_search_div").val()
+            if(s.length !=0){
                 searchCpu(currentPage);
             }else {
                 listCpu(which,currentPage)
@@ -130,7 +129,8 @@
 
     function goNext() {
         currentPage += 1
-        if($("#cpu_search_div").val() != null){
+        s=$("#cpu_search_div").val()
+        if(s.length !=0){
             searchCpu(currentPage);
         }else {
             listCpu(which,currentPage)
@@ -138,7 +138,7 @@
     }
 
     function listCpu(which,page) {
-        table = $('tbody');
+        table = $('#cpuTbody');
         table.html('');
         $.ajax({
             type: "POST",
@@ -165,7 +165,15 @@
                         html += '<td>' + '<img src="img/celeron.jpg"/>' + '</td>';
                     } else if (cpu.cpuName.indexOf('赛扬') != -1) {
                         html += '<td>' + '<img src="img/xeon.jpg"/>' + '</td>';
-                    } else {
+                    }else if (cpu.cpuName.indexOf('Ryzen 3') !=-1){
+                        html += '<td>' + '<img src="img/ryzen3.jpg"/>' + '</td>';
+                    }else if (cpu.cpuName.indexOf('Ryzen 5') !=-1){
+                        html += '<td>' + '<img src="img/ryzen5.jpg"/>' + '</td>';
+                    }else if (cpu.cpuName.indexOf('Ryzen 7') !=-1){
+                        html += '<td>' + '<img src="img/ryzen7.jpg"/>' + '</td>';
+                    }else if (cpu.cpuName.indexOf('AMD') !=-1){
+                        html += '<td>' + '<img src="img/amd.jpg"/>' + '</td>';
+                    }else {
                         html += '<td></td>'
                     }
                     html += '<td>' + cpu.cpuName + '</td>';
@@ -193,6 +201,7 @@
         currentPage=0;
         searchCpu(currentPage);
     }
+
     function searchCpu(spage) {
         table = $('tbody');
         table.html('');

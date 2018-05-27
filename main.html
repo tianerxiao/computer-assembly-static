@@ -17,14 +17,14 @@
     }
 </style>
 <body>
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default " role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="main.html">自主装机报价系统</a>
         </div>
         <div>
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">攒机</a></li>
+                <li class="active"><a href="#">首页</a></li>
                 <li><a href="#">留言板</a></li>
             </ul>
         </div>
@@ -50,12 +50,12 @@
         <div id="myCarousel" class="carousel slide">
             <!-- 轮播（Carousel）指标 -->
             <ol id="carouselIndicators" class="carousel-indicators">
-                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+
             </ol>
             <!-- 轮播（Carousel）项目 -->
             <div id="carouselInner" class="carousel-inner">
                 <div class="item active">
-                    <img style="height: 320px;width: 720px" src="http://localhost:8080/news/imagedv/223900F318F1C8E08C31D727A3E1D8C1.jpg" class="center-block" alt="First slide">
+
                 </div>
             </div>
             <!-- 轮播（Carousel）导航 -->
@@ -72,13 +72,11 @@
     <div class="row">.</div>
     <div class="row">
         <div class="col-sm-5">
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <div class="panel-title">
-                        <h4>
-                            产品列表
-                        </h4>
-                    </div>
+                    <h3 class="panel-title">
+                        购物车
+                    </h3>
                 </div>
                 <div class="list-group">
                     <a href="#" class="list-group-item" onclick="go('CPU')">
@@ -154,42 +152,28 @@
     </div>
     <div class="row">.</div>
     <div class="row">
-        <div class="col-sm-4">
-            <div class="panel panel-default">
+        <div class="col-sm-5">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <div class="panel-title">
-                        <h4>
-                            新闻
-                        </h4>
-                    </div>
+                    <h3 class="panel-title">
+                        新闻
+                    </h3>
                 </div>
                 <div class="panel-body">
+                    <table class="table table-responsive table-hover">
+                        <tbody id="newsTbody">
 
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <div class="col-sm-4">
-            <div class="panel panel-default">
+        <div class="col-sm-7">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <div class="panel-title">
-                        <h4>
-                            配置单推荐
-                        </h4>
-                    </div>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <h4>
-                            留言
-                        </h4>
-                    </div>
+                    <h3 class="panel-title">
+                        配置单推荐
+                    </h3>
                 </div>
                 <div class="panel-body">
 
@@ -249,6 +233,42 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="newsModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h3 class="modal-title" id="newsModalLabel">
+
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <h4 id="newsImage">
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <h4 id="newsNote">
+
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 </body>
 <script>
     go('CPU');
@@ -293,6 +313,7 @@
 
     $(function () {
         buildImagedv();
+        getNewsList();
         setInterval("checkLogin()", 1 * 500);
     });
 
@@ -429,29 +450,35 @@
             computerOrder: computerOrder
         }
 
-        $.ajax({
-            cache: false,
-            type: "POST",
-            url: host + "/order/order",
-            data: JSON.stringify(orderDto),
-            contentType: "application/json",
-            async: false,
-            xhrFields: {
-                withCredentials: true
-            },
-            success: function (msg) {
-                if (msg.code == 200) {
-                    alert(msg.data)
-                    window.location.href = "#"
+        if (confirm("确定提交订单")){
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: host + "/order/order",
+                data: JSON.stringify(orderDto),
+                contentType: "application/json",
+                async: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (msg) {
+                    if (msg.code == 200) {
+                        alert(msg.data)
+                        window.location.href = "#"
+                    }
+                    if (msg.code == 400) {
+                        alert(msg.data)
+                    }
+                    if (msg.code == 401) {
+                        alert(msg.data)
+                    }
                 }
-                if (msg.code == 400) {
-                    alert(msg.data)
-                }
-                if (msg.code == 401) {
-                    alert(msg.data)
-                }
-            }
-        })
+            })
+            return true
+        }else {
+            return false
+        }
+
     }
 
     function buildImagedv() {
@@ -485,5 +512,55 @@
         })
     }
 
+    function getNewsList() {
+        newsTbody = $('#newsTbody');
+        newsTbody.html('');
+        $.ajax({
+            type: "GET",
+            url: host + "/news/news",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+               news = msg.data;
+               for (i in news) {
+                   newsTitle = news[i].title
+                   html = "<tr onclick=\"selectNews('"+newsTitle+"')\">";
+                   html += '<td></td>'
+                   html += '<td>' + newsTitle + '</td>';
+                   html += '</tr>';
+                   newsTbody.append(html)
+               }
+
+            }
+        })
+    }
+    
+    function selectNews(newsTitle) {
+        newsNote = $("#newsNote")
+        newsModalLabel = $("#newsModalLabel")
+        newsModal = $("#newsModal")
+        newsImage = $("#newsImage")
+        $.ajax({
+            type: "GET",
+            url: host + "/news/news",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                news = msg.data;
+                for (i in news) {
+                    title = news[i].title
+                    if (newsTitle == title){
+                        imageHtml = '<img style="height: 160px;width: 320px" src="'+host+"/news/imagedv/"+news[i].img+'" class="center-block" alt="First slide">'
+                        newsNote.html(news[i].note)
+                        newsModalLabel.html(title)
+                        newsImage.html(imageHtml)
+                    }
+                }
+                newsModal.modal('show')
+            }
+        })
+    }
 </script>
 </html>

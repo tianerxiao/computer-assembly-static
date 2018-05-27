@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
         <div class="panel-heading">
             <div class="panel-title" style="height: 35px">
                 <h4 id="choose_title_div" class="navbar-left">
@@ -45,7 +45,7 @@
             </li>
         </ul>
     </div>
-    <div class="panel panel-default">
+    <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">
                 产品列表
@@ -62,7 +62,7 @@
                     <th>价格</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="powerTbody">
 
                 </tbody>
             </table>
@@ -110,7 +110,7 @@
     function goLast() {
         if (currentPage != 0) {
             currentPage -= 1;
-            if($("#search_power").val() != null){
+            if($("#search_power").val().length != 0){
                 searchPower();
             }else {
                 list(which, currentPage)
@@ -120,7 +120,7 @@
 
     function goNext() {
         currentPage += 1
-        if($("#search_power").val() != null){
+        if($("#search_power").val().length != 0){
             searchPower();
         }else {
             list(which, currentPage)
@@ -128,7 +128,7 @@
     }
 
     function list(which, page) {
-        table = $('tbody');
+        table = $('#powerTbody');
         table.html('');
         $.ajax({
             type: "POST",

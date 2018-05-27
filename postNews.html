@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-success">
+            <div class="panel-heading layui-bg-cyan">
+                <h3 class="panel-title">
+                    发布新闻
+                </h3>
+            </div>
+            <div class="panel-body">
+                <form id="postNewsForm" class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label for="title" class="col-sm-2 control-label">标题</label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" name="title" id="title" >
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="note" class="col-sm-2 control-label">内容</label>
+                        <div class="col-sm-8">
+                            <textarea type="text" style="height: 640px ;width: 618px" class="form-control" name="note" id="note"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="imageFile" class="col-sm-2 control-label">图片</label>
+                        <div class="col-sm-8">
+                            <input id="imageFile"  name="imageFile" type="file">
+                        </div>
+                    </div>
+                </form>
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-10">
+                        <button type="button" id="buttonClick" onclick="postNews()"
+                                class="btn layui-bg-cyan btn-default">提交
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function postNews() {
+
+        if (confirm("确定提交")){
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: host + "/news/news",
+                data: new FormData($("#postNewsForm")[0]),
+                contentType: false,
+                async: false,
+                processData:false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (msg) {
+                    console.log(msg)
+                    if (msg.code == 200) {
+                        alert(msg.data)
+                        location = 'admin.html'
+                    }
+                    if (msg.code == 400) {
+                        alert(msg.data)
+                        location = 'admin.html'
+                    }
+                }
+            })
+            return true
+        }else {
+            return false
+        }
+
+
+    }
+</script>
