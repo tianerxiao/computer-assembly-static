@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>自主装机报价系统</title>
+    <script src="js/jquery-3.1.1.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/home.css">
+    <script src="js/home.js"></script>
+    <script src="js/my.js"></script>
+</head>
+<style>
+    img {
+        width: 32px;
+        height: 32px;
+    }
+</style>
+<body>
+<nav class="navbar navbar-default " role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="main.html">自主装机报价系统</a>
+        </div>
+        <div>
+            <ul class="nav navbar-nav">
+                <li><a href="main.html">首页</a></li>
+                <li class="active"><a href="#">论坛</a></li>
+            </ul>
+        </div>
+        <div>
+            <!--向左对齐-->
+            <ul class="nav navbar-nav navbar-left">
+
+            </ul>
+            <!--向右对齐-->
+            <form id="navbar_form" class="navbar-form navbar-right" role="search">
+                <!--<a class="btn btn-default" href="register.html">-->
+                <!--注册-->
+                <!--</a>-->
+                <!--<a class="btn btn-default" href="login.html">-->
+                <!--登录-->
+                <!--</a>-->
+            </form>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        看帖
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-responsive table-hover">
+                        <tbody id="bbsTbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="panel panel-primary">
+                <div class="panel-heading layui-bg-cyan">
+                    <h3 class="panel-title">
+                        发帖
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <form id="postNewsForm" class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="title" class="col-sm-2 control-label">标题</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="title" id="title" >
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="note" class="col-sm-2 control-label">内容</label>
+                            <div class="col-sm-8">
+                                <textarea type="text" style="height: 137px ;width: 274px" class="form-control" name="note" id="note"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="imageFile" class="col-sm-2 control-label">图片</label>
+                            <div class="col-sm-8">
+                                <input id="imageFile"  name="imageFile" type="file">
+                            </div>
+                        </div>
+                    </form>
+                    <div class="form-group">
+                        <div class="col-sm-offset-4 col-sm-10">
+                            <button type="button" id="buttonClick" onclick="postFornum()"
+                                    class="btn layui-bg-cyan btn-default">提交
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="fornumModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h3 class="modal-title text-center" id="fornumModalTitle">
+
+                </h3>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <h4 id="fornumImage">
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <h4 id="fornumNote">
+
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-md-12">
+                                    <table class="table table-responsive table-hover">
+                                        <tbody id="fornumComment">
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="commentModalShow()" data-dismiss="modal">回复</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+<div class="modal fade" id="commentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header ">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" >
+                    回复
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form id="postComment" class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">帖子标题</label>
+                                        <div class="col-md-10">
+                                            <p class="control-label" style="text-align: left" id="fornumTitle"></p>
+                                        </div>
+                                    </div>
+                                    <!--<div class="form-group">-->
+                                        <!--<label class="control-label col-md-2">帖子ID</label>-->
+                                        <!--<div class="col-md-10">-->
+                                            <!--<p class="form-control" style="text-align: left" name="fornumId" id="fornumId"></p>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+                                    <div class="form-group">
+                                        <label for="note" class="col-sm-2 control-label">内容</label>
+                                        <div class="col-sm-8">
+                                            <textarea type="text" style="height: 137px ;width: 274px" class="form-control" name="commentNote" id="commentNote"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="imageFile" class="col-sm-2 control-label">图片</label>
+                                        <div class="col-sm-8">
+                                            <input id="imgFile"  name="imgFile" type="file">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="postComment();" class="btn btn-success" data-dismiss="modal">回复
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
+</body>
+<script>
+    var fornumID,fornumTitle,userId;
+
+    $(function () {
+        getFornumList()
+        setInterval("checkLogin()", 1 * 500);
+    });
+
+    function checkLogin() {
+        $.ajax({
+            type: "GET",
+            url: host + "/user/session",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                navbarForm = $('#navbar_form')
+                if (msg.code == 401) {
+                    navbarForm.html("<a class=\"btn btn-default\" href=\"register.html\">\n" +
+                        "                注册\n" +
+                        "            </a>\n" +
+                        "            <a class=\"btn btn-default\" href=\"login.html\">\n" +
+                        "                登录\n" +
+                        "            </a>")
+
+                }
+                if (msg.code == 200) {
+                    data = msg.data
+                    userAccount = data.userAccount
+                    userRole = data.userRole
+                    userId = userAccount.userId
+                    if(userRole.userRole == 1){
+                        navbarForm.html("<a style='margin-right: 20px;' href='user.html'>" + userAccount.userId + "</a>" +
+                            "<a class='btn btn-default' onclick='removeSession()'>注销</a>")
+                    }else {
+                        navbarForm.html("<a style='margin-right: 20px;' href='admin.html'>" + userAccount.userId + "</a>" +
+                            "<a class='btn btn-default' onclick='removeSession()'>注销</a>")
+                    }
+
+                }
+            }
+        })
+    }
+
+    function removeSession() {
+        $.ajax({
+            type: "DELETE",
+            url: host + "/user/session",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                window.location.href = "main.html"
+            }
+        })
+    }
+
+    function postFornum() {
+
+        if (confirm("确定提交")){
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: host + "/bbs/fornum",
+                data: new FormData($("#postNewsForm")[0]),
+                contentType: false,
+                async: false,
+                processData:false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (msg) {
+                    console.log(msg)
+                    if (msg.code == 200) {
+                        alert(msg.data)
+                        location = 'bbs.html'
+                    }
+                    if (msg.code != 200) {
+                        alert(msg.data)
+                        location = 'bbs.html'
+                    }
+                }
+            })
+            return true
+        }else {
+            return false
+        }
+    }
+
+    function getFornumList() {
+        bbsTbody = $('#bbsTbody');
+        bbsTbody.html('');
+        $.ajax({
+            type: "GET",
+            url: host + "/bbs/fornum",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                bbsData = msg.data;
+                for (i in bbsData) {
+                    fornum = bbsData[i].fornum
+                    fornumComment = bbsData[i].fornumCommentList
+                    fornumTitle = fornum.title
+                    html = "<tr onclick=\"selectFornum('"+fornum.id+"')\">";
+                    html += '<td><font size="3" color="blue">用户'+fornum.userId+':</font></td>'
+                    html += '<td style="cursor: pointer"><font size="4" color="blue">' + fornumTitle + '</font></td>';
+                    html += '<td><font size="3" color="blue">' + fornumComment.length + '条回复</font></td>';
+                    html += '</tr>';
+                    bbsTbody.append(html)
+                }
+
+            }
+        })
+    }
+
+    function selectFornum(fornumId) {
+        fornumNote = $("#fornumNote")
+        fornumModalTitle = $("#fornumModalTitle")
+        fornumModal = $("#fornumModal")
+        fornumImage = $("#fornumImage")
+        fornumComment = $('#fornumComment');
+        fornumComment.html('');
+        fornumImage.html('')
+        fornumNote.html('')
+        $.ajax({
+            type: "GET",
+            url: host + "/bbs/fornumById/"+fornumId,
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                bbsDto = msg.data;
+                fornum = bbsDto.fornum
+                fornumCommentList = bbsDto.fornumCommentList
+                if (fornum.img ){
+                    imageHtml = '<img style="height: 160px;width: 320px" src="'+host+"/news/imagedv/"+fornum.img+'" class="center-block" alt="First slide">'
+                    fornumImage.html(imageHtml)
+                }
+                fornumNote.html(fornum.note)
+                fornumModalTitle.html(fornum.title)
+
+                for (j in fornumCommentList){
+                    html = "<tr>";
+                    html += '<td><font size="3" color="blue">用户'+fornumCommentList[j].userId+':</font></td>'
+                    html += '<td><img style="height: 80px;width: 160px" src="'+host+"/news/imagedv/"+fornumCommentList[j].img+'" class="left" alt="First slide"><br><font size="3">' + fornumCommentList[j].comment + '</font></td>';
+                    html += '<td><font size="3">' + (parseInt(j)+1) + '楼</font></td>';
+                    html += '</tr>';
+                    fornumComment.append(html)
+                }
+                fornumTitle = fornum.title
+                fornumID = fornum.id
+                fornumModal.modal('show')
+            }
+        })
+    }
+
+    function commentModalShow() {
+        commentModal = $("#commentModal")
+        fornumId = $("#fornumTitle")
+        fornumId.html(fornumTitle)
+        $("#fornumId").html(fornumID)
+        commentModal.modal("show")
+    }
+
+    function postComment() {
+        postCommentData = new FormData($("#postComment")[0])
+        postCommentData.append("fornumId",fornumID)
+        if (confirm("确定提交")){
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: host + "/bbs/comment",
+                data: postCommentData,
+                contentType: false,
+                async: false,
+                processData:false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (msg) {
+                    console.log(msg)
+                    if (msg.code == 200) {
+                        alert(msg.data)
+                        location = 'bbs.html'
+                    }
+                    if (msg.code != 200) {
+                        alert(msg.data)
+                        location = 'bbs.html'
+                    }
+                }
+            })
+            return true
+        }else {
+            return false
+        }
+    }
+
+</script>
+</html>
