@@ -18,6 +18,24 @@
     </div>
 </div>
 
+<div class="row">
+    <div class="col-sm-12">
+        <h4>月注册量</h4>
+        <div id="month-register-line-chart" style="height: 250px"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <h4>月订单量</h4>
+        <div id="month-order-line-chart" style="height: 250px"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <h4>月销售额</h4>
+        <div id="month-order-price-chart" style="height: 250px"></div>
+    </div>
+</div>
 <script>
 
     $(function () {
@@ -90,6 +108,81 @@
                         xkey: 'time',
                         ykeys: ['num'],
                         labels: ['日订单数'],
+                        lineColors: ['#3c8dbc'],
+                        hideHover: 'true'
+                    });
+                }
+            }
+        })
+        $.ajax({
+            type: "GET",
+            url: host + "/count/orderCountMonth",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                if (msg.code == 401) {
+                    window.location.href = "login.html"
+                }
+                if (msg.code == 200) {
+                    orderCountData = msg.data
+                    var line = new Morris.Line({
+                        element: 'month-order-line-chart',
+                        resize: true,
+                        data:orderCountData,
+                        xkey: 'time',
+                        ykeys: ['num'],
+                        labels: ['月订单数'],
+                        lineColors: ['#3c8dbc'],
+                        hideHover: 'true'
+                    });
+                }
+            }
+        })
+        $.ajax({
+            type: "GET",
+            url: host + "/count/accountCountMonth",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                if (msg.code == 401) {
+                    window.location.href = "login.html"
+                }
+                if (msg.code == 200) {
+                    orderCountData = msg.data
+                    var line = new Morris.Line({
+                        element: 'month-register-line-chart',
+                        resize: true,
+                        data:orderCountData,
+                        xkey: 'time',
+                        ykeys: ['num'],
+                        labels: ['月注册量'],
+                        lineColors: ['#3c8dbc'],
+                        hideHover: 'true'
+                    });
+                }
+            }
+        })
+        $.ajax({
+            type: "GET",
+            url: host + "/count/orderPriceSumMonth",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                if (msg.code == 401) {
+                    window.location.href = "login.html"
+                }
+                if (msg.code == 200) {
+                    orderCountData = msg.data
+                    var line = new Morris.Line({
+                        element: 'month-order-price-chart',
+                        resize: true,
+                        data:orderCountData,
+                        xkey: 'time',
+                        ykeys: ['num'],
+                        labels: ['月销售额'],
                         lineColors: ['#3c8dbc'],
                         hideHover: 'true'
                     });

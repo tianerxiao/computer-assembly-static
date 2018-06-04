@@ -40,7 +40,7 @@
                 <div class="row">
 
                     <div class="col-md-12">
-                        <div class="form-horizontal">
+                        <div id="modalForm" class="form-horizontal">
                             <div class="form-group">
                                 <label class="control-label col-md-2">订单号</label>
                                 <div class="col-md-10">
@@ -173,6 +173,7 @@
         listOrder()
     })
     var expChoose = new Array("顺丰速递","百世汇通","中通快递","申通快递","圆通快递","韵达快递")
+    modalForm = $("#modalForm")
 
     function listOrder() {
         table = $('tbody');
@@ -225,6 +226,12 @@
         orderDescribe = $("#describe")
         orderModal = $("#orderModal")
         orderPay = $("#pay")
+        orderCpu.html("")
+        orderMemory.html("")
+        orderBoard.html("")
+        orderVga.html("")
+        orderPower.html("")
+
         $.ajax({
             type: "get",
             url: host + "/order/notExpOrder/",
@@ -243,11 +250,16 @@
                     orderId.html(order.orderId)
                     orderName.html(part.partTableName)
                     orderPrice.html(order.price + "￥")
-                    orderCpu.html(getName('CPU', part.cpuId).data.cpuName)
-                    orderMemory.html(getName('内存', part.memId).data.memName)
-                    orderBoard.html(getName('主板', part.boardId).data.boardName)
-                    orderVga.html(getName('显卡', part.vgaId).data.vgaName)
-                    orderPower.html(getName('电源', part.powerId).data.powerName)
+                    if(part.cpuId)
+                        orderCpu.html(getName('CPU', part.cpuId).data.cpuName)
+                    if(part.memId)
+                        orderMemory.html(getName('内存', part.memId).data.memName)
+                    if(part.boardId)
+                        orderBoard.html(getName('主板', part.boardId).data.boardName)
+                    if(part.vgaId)
+                        orderVga.html(getName('显卡', part.vgaId).data.vgaName)
+                    if(part.powerId)
+                        orderPower.html(getName('电源', part.powerId).data.powerName)
                     orderDescribe.html(part.partTableDescribe)
                     orderPay.html(order.pay)
                     payOrderId = order.orderId

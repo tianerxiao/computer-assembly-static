@@ -135,7 +135,7 @@
                 <div class="panel-footer">
                     <form role="form">
                         <div class="form-group">
-                            <label>备注</label>
+                            <label>描述</label>
                             <textarea class="form-control" id="partTableDescribe" rows="3"></textarea>
                             <br>
                             <button type="submit" id="buttonClick" onclick="postOrder();"
@@ -176,7 +176,11 @@
                     </h3>
                 </div>
                 <div class="panel-body">
+                    <table class="table table-responsive table-hover">
+                        <tbody id="partTbody">
 
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -269,6 +273,69 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal -->
 </div>
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="partModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="partModalTitle">
+                    订单详情
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-12">
+                        <div id="modalForm" class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">处理器</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="partCpu"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">主板</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="partBoard"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">内存</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="partMemory"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">电源</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="partPower"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">显卡</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="partVga"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-md-2">描述</label>
+                                <div class="col-md-10">
+                                    <p class="control-label" style="text-align: left" id="partDescribe"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-dismiss="modal">关闭</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
 </body>
 <script>
     go('CPU');
@@ -314,6 +381,7 @@
     $(function () {
         buildImagedv();
         getNewsList();
+        getPartList();
         setInterval("checkLogin()", 1 * 500);
     });
 
@@ -431,6 +499,7 @@
     }
 
     function postOrder() {
+        var partTableDescribe = $("#partTableDescribe").val()
         var computerOrder = {
             price: priceSum
         }
@@ -448,6 +517,11 @@
         var orderDto = {
             computerPart: computerPart,
             computerOrder: computerOrder
+        }
+
+        if(partTableDescribe == "" ||partTableDescribe==null || partTableDescribe == undefined){
+            alert("请输入配置单描述")
+            return false
         }
 
         if (confirm("确定提交订单")){
@@ -535,6 +609,30 @@
             }
         })
     }
+
+    function getPartList() {
+        partTbody = $('#partTbody');
+        partTbody.html('');
+        $.ajax({
+            type: "GET",
+            url: host + "/news/parts",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                parts = msg.data;
+                for (i in parts) {
+                    partTableDescribe = parts[i].partTableDescribe
+                    html = "<tr onclick=\"selectParts('"+parts[i].partTableId+"')\">";
+                    html += '<td></td>'
+                    html += '<td>' + partTableDescribe + '</td>';
+                    html += '</tr>';
+                    partTbody.append(html)
+                }
+
+            }
+        })
+    }
     
     function selectNews(newsTitle) {
         newsNote = $("#newsNote")
@@ -561,6 +659,67 @@
                 newsModal.modal('show')
             }
         })
+    }
+    
+    function selectParts(partTableId) {
+        partCpu = $("#partCpu")
+        partMemory = $("#partMemory")
+        partBoard = $("#partBoard")
+        partVga = $("#partVga")
+        partPower = $("#partPower")
+        partDescribe = $("#partDescribe")
+        partModal = $("#partModal")
+        partCpu.html("")
+        partMemory.html("")
+        partBoard.html("")
+        partVga.html("")
+        partPower.html("")
+        partDescribe.html("")
+        $.ajax({
+            type: "GET",
+            url: host + "/news/parts",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (msg) {
+                parts = msg.data;
+                for (i in parts) {
+                    partTableId1 = parts[i].partTableId
+                    if (partTableId == partTableId1){
+                        part = parts[i]
+                        if(part.cpuId)
+                            partCpu.html(getName('CPU', part.cpuId).data.cpuName)
+                        if(part.memId)
+                            partMemory.html(getName('内存', part.memId).data.memName)
+                        if(part.boardId)
+                            partBoard.html(getName('主板', part.boardId).data.boardName)
+                        if(part.vgaId)
+                            partVga.html(getName('显卡', part.vgaId).data.vgaName)
+                        if(part.powerId)
+                            partPower.html(getName('电源', part.powerId).data.powerName)
+
+                        partDescribe.html(part.partTableDescribe)
+                    }
+                }
+                partModal.modal('show')
+            }
+        })
+    }
+
+    function getName(type, id) {
+        return $.ajax({
+            type: "post",
+            url: host + "/part/get-part",
+            data: JSON.stringify({
+                part: type,
+                searchContent: "" + id
+            }),
+            contentType: "application/json",
+            async: false,
+            xhrFields: {
+                withCredentials: true
+            }
+        }).responseJSON;
     }
 </script>
 </html>
