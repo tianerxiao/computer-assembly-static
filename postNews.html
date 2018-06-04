@@ -18,7 +18,7 @@
                     <div class="form-group">
                         <label for="note" class="col-sm-2 control-label">内容</label>
                         <div class="col-sm-8">
-                            <textarea type="text" style="height: 640px ;width: 618px" class="form-control" name="note" id="note"></textarea>
+                            <textarea type="text" style="height: 592px ;width: 535px" class="form-control" name="note" id="note"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -40,7 +40,73 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-10">
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <div class="panel-title">
+                    <h4>
+                        新闻列表
+                    </h4>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table class="table table-responsive table-hover">
+                    <thead>
+                    <tr>
+                        <th>新闻标题</th>
+                        <th>ID</th>
+                        <th>提交时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
+    $(function () {
+        table = $('tbody');
+        table.html('');
+        $.ajax({
+            type: "get",
+            url: host + "/news/news/",
+            xhrFields:{
+                withCredentials: true
+            },
+            success: function (msg) {
+                if(msg.code == 401){
+                    alert("未登录")
+                    window.location.href = "login.html"
+                }
+                if(msg.code == 400){
+                    table = $('tbody');
+                    table.html('');
+                }
+                data = msg.data;
+                for (i in data) {
+                    title = data[i].title;
+                    createTime = data[i].savetime;
+                    html = "<tr >"
+                    html += '<td>' + title + '</td>';
+                    html += '<td>' + data[i].id + '</td>';
+                    html += '<td>' + createTime + '</td>';
+                    html += '<td>' + "<button type=\"button\" onclick=\"deleteNews('"+data[i].id+"')\" class=\"btn btn-success\" data-dismiss=\"modal\">删除\n" + "</button>" + '</td>';
+                    html += '</tr>';
+                    table.append(html)
+                }
+            },
+            error: function (msg) {
+                alert("无法连接到服务器，请重新尝试")
+                table = $('tbody');
+                table.html('');
+            }
+        })
+    })
     function postNews() {
 
         if (confirm("确定提交")){
@@ -69,6 +135,36 @@
             })
             return true
         }else {
+            return false
+        }
+    }
+    function deleteNews(newsId) {
+        if(confirm("确定删除新闻吗")){
+            $.ajax({
+                cache: false,
+                type: "DELETE",
+                url: host + "/news/news/"+newsId,
+                contentType: "application/json",
+                async: false,
+                xhrFields: {
+                    withCredentials: true
+                },
+                success: function (msg) {
+                    if (msg.code == 200) {
+                        alert(msg.data)
+                        location = 'admin.html'
+                        return true
+                    }
+                    if (msg.code == 401) {
+                        alert(msg.data)
+                        location = 'admin.html'
+                        return false
+                    }
+                }
+            })
+            return true
+        }else {
+            window.location.href = "#"
             return false
         }
     }
